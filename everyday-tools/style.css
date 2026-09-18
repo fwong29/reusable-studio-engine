@@ -117,13 +117,19 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 5px;
-  max-width: 240px;
+  align-items: center;
+  gap: 8px 14px;
+  max-width: 252px;
   min-height: 6px;
 }
 
+.mark-group {
+  display: flex;
+  gap: 4px;
+}
+
 .tally-marks .mark {
-  width: 14px;
+  width: 12px;
   height: 6px;
   border-radius: 3px;
   background: var(--accent);

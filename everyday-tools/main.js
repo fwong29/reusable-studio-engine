@@ -20,23 +20,38 @@ function pulse(el, cls) {
   el.addEventListener('animationend', () => el.classList.remove(cls), { once: true });
 }
 
+// Marks are grouped in fives, like a physical tally. Grouping keeps a long
+// count countable and rhythmic instead of collapsing into a solid alarm bar.
+const GROUP = 5;
+
+function addMark(isNew) {
+  let group = tallyMarksEl.lastElementChild;
+  if (!group || group.childElementCount >= GROUP) {
+    group = document.createElement('span');
+    group.className = 'mark-group';
+    tallyMarksEl.appendChild(group);
+  }
+  const mark = document.createElement('span');
+  mark.className = isNew ? 'mark is-new' : 'mark';
+  group.appendChild(mark);
+}
+
+function countMarks() {
+  let n = 0;
+  for (const g of tallyMarksEl.children) n += g.childElementCount;
+  return n;
+}
+
 function renderMarks(count, tapped) {
   const shown = Math.min(count, MAX_MARKS);
-  const have = tallyMarksEl.childElementCount;
 
-  if (tapped && shown === have + 1) {
-    const mark = document.createElement('span');
-    mark.className = 'mark is-new';
-    tallyMarksEl.appendChild(mark);
+  if (tapped && shown === countMarks() + 1) {
+    addMark(true);
     return;
   }
 
   tallyMarksEl.innerHTML = '';
-  for (let i = 0; i < shown; i++) {
-    const mark = document.createElement('span');
-    mark.className = 'mark';
-    tallyMarksEl.appendChild(mark);
-  }
+  for (let i = 0; i < shown; i++) addMark(false);
 }
 
 function render(fx = {}) {

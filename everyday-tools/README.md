@@ -62,6 +62,12 @@ Direction: **Speed Bump** — friction that reads as deliberate, never punitive.
 
 Timings live as CSS custom properties (`--t-tap`, `--t-land`, `--t-result`, `--t-clear`) at the top of `style.css`, so the pacing is declared in one place rather than scattered.
 
+### The accent rule at scale
+
+The accent is meant to read as *effort*, not alarm. A dense unbroken row of terracotta pills breaks that rule — above ~20 it stops reading as a count and starts reading as a warning bar. So the marks are **grouped in fives**, like a physical tally. Grouping keeps the color meaning intact at any length: the eye parses rhythmic clusters ("counting a lot") instead of a solid slab, the count stays legible at a glance, and it reinforces the tally-counter idiom the tool is built on.
+
+The seam is also font-independent: the marks are CSS elements, not glyphs, so on a slow or failed webfont load they render identically. The numerals fall back to system monospace and show immediately (`display=swap`), swapping to Space Mono when it arrives — the meaning-carrying seam never waits on the network.
+
 ## Running locally
 
 Open `index.html` in a browser, or serve the folder:
