@@ -7,8 +7,6 @@ A calculator with one number key. Entering a number takes that many taps — 7 i
 - Intent: [TOOL_INTENT.md](TOOL_INTENT.md)
 - Demo recording: [process/demo.mp4](process/demo.mp4)
 
-![Core loop: seven taps build a 7, one press commits it, three taps build a 3, = gives 10](process/demo.gif)
-
 ## Back-end architecture
 
 **What data does this tool need?**
