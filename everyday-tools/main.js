@@ -1,3 +1,4 @@
+const machine = document.querySelector('.machine');
 const display = document.getElementById('display');
 const tallyButton = document.getElementById('tally');
 const tallyCountEl = document.getElementById('tallyCount');
@@ -6,14 +7,31 @@ const keys = Array.from(document.querySelectorAll('[data-type]'));
 
 const OPS = ['+', '−', '×', '÷'];
 const isOp = (x) => OPS.includes(x);
+const MAX_MARKS = 40;
 
 let tokens = [];
 let currentTally = 0;
 let tallyTouched = false;
 
-function renderMarks(count) {
+function pulse(el, cls) {
+  el.classList.remove(cls);
+  void el.offsetWidth;
+  el.classList.add(cls);
+  el.addEventListener('animationend', () => el.classList.remove(cls), { once: true });
+}
+
+function renderMarks(count, tapped) {
+  const shown = Math.min(count, MAX_MARKS);
+  const have = tallyMarksEl.childElementCount;
+
+  if (tapped && shown === have + 1) {
+    const mark = document.createElement('span');
+    mark.className = 'mark is-new';
+    tallyMarksEl.appendChild(mark);
+    return;
+  }
+
   tallyMarksEl.innerHTML = '';
-  const shown = Math.min(count, 40);
   for (let i = 0; i < shown; i++) {
     const mark = document.createElement('span');
     mark.className = 'mark';
@@ -21,13 +39,22 @@ function renderMarks(count) {
   }
 }
 
-function render() {
+function render(fx = {}) {
+  display.classList.remove('is-error');
   tallyCountEl.textContent = String(currentTally);
-  renderMarks(currentTally);
+  renderMarks(currentTally, fx.tap);
 
   const parts = tokens.slice();
   if (tallyTouched) parts.push(String(currentTally));
   display.textContent = parts.length ? parts.join(' ') : '0';
+
+  if (fx.tap) pulse(tallyCountEl, 'is-tick');
+  if (fx.land) {
+    pulse(tallyButton, 'is-landing');
+    pulse(display, 'is-landing');
+  }
+  if (fx.result) pulse(display, 'is-result');
+  if (fx.clear) pulse(machine, 'is-clearing');
 }
 
 function evaluate(list) {
@@ -60,34 +87,34 @@ function evaluate(list) {
 function pressTally() {
   currentTally += 1;
   tallyTouched = true;
-  render();
+  render({ tap: true });
+}
+
+function commitTally() {
+  if (!tallyTouched) return false;
+  tokens.push(String(currentTally));
+  currentTally = 0;
+  tallyTouched = false;
+  return true;
 }
 
 function pressOperator(op) {
   if (tokens.length === 0 && !tallyTouched) return;
 
-  if (tallyTouched) {
-    tokens.push(String(currentTally));
-    currentTally = 0;
-    tallyTouched = false;
-  }
+  const landed = commitTally();
 
   if (isOp(tokens[tokens.length - 1])) {
     tokens[tokens.length - 1] = op;
   } else {
     tokens.push(op);
   }
-  render();
+  render({ land: landed });
 }
 
 function pressEquals() {
   if (tokens.length === 0 && !tallyTouched) return;
 
-  if (tallyTouched) {
-    tokens.push(String(currentTally));
-    currentTally = 0;
-    tallyTouched = false;
-  }
+  commitTally();
 
   if (isOp(tokens[tokens.length - 1])) tokens.pop();
   if (tokens.length === 0) {
@@ -101,19 +128,21 @@ function pressEquals() {
     if (!isFinite(result)) throw new Error('divide by zero');
   } catch (e) {
     tokens = [];
+    render();
     display.textContent = 'Error';
+    display.classList.add('is-error');
     return;
   }
 
   tokens = [String(Math.round(result * 1e10) / 1e10)];
-  render();
+  render({ result: true });
 }
 
 function pressClear() {
   tokens = [];
   currentTally = 0;
   tallyTouched = false;
-  render();
+  render({ clear: true });
 }
 
 function pressBackspace() {

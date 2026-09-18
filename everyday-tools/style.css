@@ -1,14 +1,21 @@
 :root {
-  --bg: #e8e0cd;
-  --card: #f3ecdb;
-  --ink: #2b2419;
-  --ink-soft: #6b5f4c;
-  --key: #fbf6e9;
-  --key-edge: #d8cdb2;
-  --accent: #a8462c;
-  --accent-edge: #7e3220;
-  --display-bg: #21201b;
-  --display-ink: #f0e9d8;
+  --bg: #ebe3d2;
+  --card: #f6efe0;
+  --ink: #26201a;
+  --ink-soft: #7b6f5c;
+  --key: #fcf8ee;
+  --key-edge: #d9cdb3;
+  --accent: #d9572a;
+  --accent-edge: #9c3a1a;
+  --accent-soft: #f8dccb;
+  --display-bg: #211d18;
+  --display-ink: #f4ecdc;
+
+  --t-tap: 220ms;
+  --t-land: 500ms;
+  --t-result: 400ms;
+  --t-clear: 300ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 * {
@@ -27,64 +34,70 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 48px 20px;
 }
 
 .machine {
   background: var(--card);
-  border-radius: 22px;
-  padding: 28px 24px 22px;
-  width: 320px;
+  border-radius: 24px;
+  padding: 28px 24px 24px;
+  width: 336px;
   box-shadow:
     0 1px 0 #fff inset,
-    0 18px 40px -12px rgba(43, 36, 25, 0.35),
+    0 24px 48px -16px rgba(38, 32, 26, 0.35),
     0 2px 0 var(--key-edge);
 }
 
 .nameplate {
-  font-size: 13px;
-  letter-spacing: 0.14em;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink-soft);
   text-align: center;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .display {
   background: var(--display-bg);
   color: var(--display-ink);
   font-family: 'Space Mono', monospace;
-  font-size: 30px;
-  letter-spacing: 0.03em;
-  padding: 22px 16px;
-  border-radius: 12px;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  padding: 24px 18px;
+  border-radius: 14px;
   text-align: right;
-  min-height: 44px;
+  min-height: 48px;
   overflow-x: auto;
   white-space: nowrap;
   box-shadow:
-    inset 0 2px 6px rgba(0, 0, 0, 0.55),
+    inset 0 2px 8px rgba(0, 0, 0, 0.55),
     inset 0 -1px 0 rgba(255, 255, 255, 0.04);
-  margin-bottom: 18px;
+  margin-bottom: 20px;
+}
+
+.display.is-error {
+  color: var(--accent);
 }
 
 .tally {
   width: 100%;
-  height: 120px;
+  height: 136px;
   border: none;
-  border-radius: 16px;
+  border-radius: 18px;
   background: var(--key);
   box-shadow:
     0 2px 0 var(--key-edge),
-    0 4px 8px rgba(43, 36, 25, 0.18);
+    0 6px 12px rgba(38, 32, 26, 0.16);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  transition: transform 0.05s ease, box-shadow 0.05s ease;
-  margin-bottom: 10px;
+  gap: 12px;
+  transition: transform 80ms ease, box-shadow 80ms ease;
+  margin-bottom: 12px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .tally:active {
@@ -94,7 +107,8 @@ body {
 
 .tally-count {
   font-family: 'Space Mono', monospace;
-  font-size: 40px;
+  font-size: 44px;
+  font-weight: 700;
   color: var(--ink);
   line-height: 1;
 }
@@ -103,23 +117,23 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 4px;
-  max-width: 220px;
+  gap: 5px;
+  max-width: 240px;
   min-height: 6px;
 }
 
 .tally-marks .mark {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--ink-soft);
+  width: 14px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--accent);
 }
 
 .row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .row:last-child {
@@ -129,20 +143,21 @@ body {
 .key {
   position: relative;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   background: var(--key);
   color: var(--ink);
   font-family: 'Space Mono', monospace;
-  font-size: 19px;
-  height: 52px;
+  font-size: 18px;
+  height: 54px;
   cursor: pointer;
   box-shadow:
     0 2px 0 var(--key-edge),
-    0 4px 8px rgba(43, 36, 25, 0.18);
-  transition: transform 0.05s ease, box-shadow 0.05s ease;
+    0 6px 12px rgba(38, 32, 26, 0.16);
+  transition: transform 80ms ease, box-shadow 80ms ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .key:active {
@@ -152,18 +167,26 @@ body {
 
 .key--op {
   background: var(--accent);
-  color: #fdf6ec;
+  color: #fff5ea;
   box-shadow:
     0 2px 0 var(--accent-edge),
-    0 4px 8px rgba(43, 36, 25, 0.22);
+    0 6px 12px rgba(38, 32, 26, 0.2);
+}
+
+.key--op:active {
+  box-shadow: 0 0 0 var(--accent-edge);
 }
 
 .key--equals {
   background: var(--ink);
   color: var(--display-ink);
   box-shadow:
-    0 2px 0 #0f0d09,
-    0 4px 8px rgba(43, 36, 25, 0.25);
+    0 2px 0 #0f0c09,
+    0 6px 12px rgba(38, 32, 26, 0.22);
+}
+
+.key--equals:active {
+  box-shadow: 0 0 0 #0f0c09;
 }
 
 .key--control {
@@ -172,9 +195,81 @@ body {
 }
 
 .caption {
-  margin-top: 16px;
+  margin-top: 18px;
   text-align: center;
   font-size: 11px;
   color: var(--ink-soft);
   letter-spacing: 0.02em;
+}
+
+/* Motion is reserved for the moments that carry meaning: a tap landing,
+   a number committing, a result arriving, a clear. Nothing moves idle. */
+
+.mark.is-new {
+  animation: mark-in var(--t-tap) var(--ease-out);
+}
+
+.tally-count.is-tick {
+  animation: tick var(--t-tap) var(--ease-out);
+}
+
+.tally.is-landing {
+  animation: settle var(--t-land) var(--ease-out);
+}
+
+.display.is-landing {
+  animation: land var(--t-land) var(--ease-out);
+}
+
+.display.is-result {
+  animation: arrive var(--t-result) var(--ease-out);
+}
+
+.machine.is-clearing .display,
+.machine.is-clearing .tally {
+  animation: clear var(--t-clear) ease;
+}
+
+@keyframes mark-in {
+  from { transform: scale(0.4); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes tick {
+  from { transform: translateY(-3px); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes settle {
+  0%   { opacity: 1; }
+  40%  { opacity: 0.35; }
+  100% { opacity: 1; }
+}
+
+@keyframes land {
+  0%   { opacity: 0.4; transform: translateY(2px); }
+  100% { opacity: 1;   transform: translateY(0); }
+}
+
+@keyframes arrive {
+  0%   { opacity: 0.3; transform: scale(0.985); }
+  100% { opacity: 1;   transform: scale(1); }
+}
+
+@keyframes clear {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mark.is-new,
+  .tally-count.is-tick,
+  .tally.is-landing,
+  .display.is-landing,
+  .display.is-result,
+  .machine.is-clearing .display,
+  .machine.is-clearing .tally {
+    animation: none;
+  }
 }
