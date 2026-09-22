@@ -45,14 +45,24 @@ function countMarks() {
 
 function renderMarks(count, tapped) {
   const shown = Math.min(count, MAX_MARKS);
+  const overflow = count - shown;
 
-  if (tapped && shown === countMarks() + 1) {
+  // Fast path only while under the cap: append the one new mark. Past the cap
+  // we rebuild so the "+N more" indicator stays exact — the seam must never
+  // claim a count it isn't actually showing.
+  if (tapped && overflow === 0 && shown === countMarks() + 1) {
     addMark(true);
     return;
   }
 
   tallyMarksEl.innerHTML = '';
   for (let i = 0; i < shown; i++) addMark(false);
+  if (overflow > 0) {
+    const more = document.createElement('span');
+    more.className = 'mark-overflow';
+    more.textContent = '+' + overflow;
+    tallyMarksEl.appendChild(more);
+  }
 }
 
 function render(fx = {}) {

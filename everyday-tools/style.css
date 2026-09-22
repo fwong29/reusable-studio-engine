@@ -135,6 +135,15 @@ body {
   background: var(--accent);
 }
 
+.mark-overflow {
+  align-self: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-left: 2px;
+}
+
 .row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
