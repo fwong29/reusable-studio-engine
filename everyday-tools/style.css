@@ -48,14 +48,40 @@ body {
     0 2px 0 var(--key-edge);
 }
 
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
 .nameplate {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  text-align: center;
-  margin-bottom: 16px;
+}
+
+.sound-toggle {
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 120ms ease, color 120ms ease;
+}
+
+.sound-toggle:hover { opacity: 1; }
+
+.sound-toggle[aria-pressed="true"] {
+  color: var(--accent);
+  opacity: 1;
 }
 
 .display {

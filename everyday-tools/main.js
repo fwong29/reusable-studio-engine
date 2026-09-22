@@ -14,6 +14,34 @@ let currentTally = 0;
 let tallyTouched = false;
 let justEvaluated = false;
 
+// Opt-in per-tap tick, off by default. A soft click makes "each tap is one
+// act" physical, like an adding machine — but only if the user asks for it.
+const audio = new (window.AudioContext || window.webkitAudioContext)();
+let soundOn = false;
+
+function playTick() {
+  if (!soundOn) return;
+  const osc = audio.createOscillator();
+  const gain = audio.createGain();
+  osc.type = 'triangle';
+  osc.frequency.value = 220;
+  const t = audio.currentTime;
+  gain.gain.setValueAtTime(0.0001, t);
+  gain.gain.exponentialRampToValueAtTime(0.12, t + 0.005);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
+  osc.connect(gain).connect(audio.destination);
+  osc.start(t);
+  osc.stop(t + 0.09);
+}
+
+const soundToggle = document.getElementById('soundToggle');
+soundToggle.addEventListener('click', () => {
+  soundOn = !soundOn;
+  soundToggle.setAttribute('aria-pressed', String(soundOn));
+  soundToggle.textContent = 'tap sound: ' + (soundOn ? 'on' : 'off');
+  soundToggle.title = 'Tap sound (' + (soundOn ? 'on' : 'off') + ')';
+});
+
 function pulse(el, cls) {
   el.classList.remove(cls);
   void el.offsetWidth;
@@ -119,6 +147,7 @@ function pressTally() {
   }
   currentTally += 1;
   tallyTouched = true;
+  playTick();
   render({ tap: true });
 }
 
