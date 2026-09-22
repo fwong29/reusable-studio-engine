@@ -1,6 +1,6 @@
 # Weight
 
-A calculator with one number key. Entering a number takes that many taps — 7 is seven taps. Operators, `=`, `C`, and `⌫` register on the first press. It computes correctly; it just refuses to let a quantity arrive for free.
+A calculator with one number key. Entering a number takes that many taps — 7 is seven taps. A single operator key cycles `+ − × ÷` on tap (four pips show which), and `=`, `C`, `⌫` register on the first press. It also takes the keyboard — space is one tap, Shift cycles the operator, `=`/Enter apply, Backspace/Esc undo/clear — and an optional tap sound (off by default). It computes correctly; it just refuses to let a quantity arrive for free.
 
 - Live: https://fwong29.github.io/reusable-studio-engine/everyday-tools/
 - Repo: https://github.com/fwong29/reusable-studio-engine (this project lives in `everyday-tools/`)
@@ -18,6 +18,8 @@ Each entry is a moment the tool broke past its simplest case, and the commit tha
 3. **`c440c88` — 2026-09-22 — a number after `=` errored.** Reproduce: `2 + 2 = 4`, then one tap showed `4 1` (two numbers, no operator), and `=` then threw `Error`. A tap after a result now starts a fresh calculation; an operator after a result still continues from it.
 
 4. **`3fd6e95` — 2026-09-22 — the seam lied above 40.** Reproduce: 45 taps showed `45` on the numeral but only 40 marks, so the seam under-reported the real count with no signal. Past the 40-mark cap the panel now appends a `+N more` indicator, keeping the seam honest at any count.
+
+5. **`5fd2578` — 2026-09-22 — holding space machine-gunned taps.** After adding keyboard input, holding the space bar auto-repeated into taps (2 presses + 4 repeats = 6), so a held key could build a big number for free — defeating the one-press-one-tap cost the whole tool is built on. Now auto-repeat (`e.repeat`) is ignored and default actions are prevented, so space no longer scrolls the page or re-activates a focused on-screen key.
 
 ## Back-end architecture
 
@@ -46,9 +48,9 @@ There is no API to fail. There is one arithmetic edge — division by zero — a
 
 | Layer | Where | What |
 |---|---|---|
-| Input | `index.html` buttons → `click` listeners in `main.js` | The tally key, four operators, `=`, `C`, `⌫` |
-| Logic | `pressTally`, `pressOperator`, `pressEquals`, `pressClear`, `pressBackspace`, `evaluate` | Increment the tally; commit it as a number when an operator or `=` is pressed; evaluate with standard precedence |
-| Output | `render` → `#display`, `#tallyCount`, `#tallyMarks` | The running expression, the current tally as a numeral, and one mark per tap |
+| Input | `index.html` buttons + a window `keydown` listener in `main.js` | The number key, one cycling operator key, `=`, `C`, `⌫`; keyboard: space = one tap, Shift cycles the operator, `=`/Enter, Backspace, Esc |
+| Logic | `pressTally`, `cycleOperator`, `pressOperator`, `pressEquals`, `pressClear`, `pressBackspace`, `evaluate` | Increment the tally; cycle/commit the operator; evaluate with standard precedence; `justEvaluated` starts a fresh entry after a result |
+| Output | `render` → `#display`, `#tallyCount`, `#tallyMarks`, `#opGlyph` | The running expression, the tally numeral, one mark per tap (grouped in fives, `+N` overflow), and the current operator glyph |
 
 The logic is in plain functions with no framework. Every state change goes through `render()`, so what the display shows is always exactly what the variables hold.
 
