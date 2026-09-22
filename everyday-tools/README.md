@@ -7,6 +7,18 @@ A calculator with one number key. Entering a number takes that many taps — 7 i
 - Intent: [TOOL_INTENT.md](TOOL_INTENT.md)
 - Demo recording: [process/demo.mp4](process/demo.mp4)
 
+## Break log
+
+Each entry is a moment the tool broke past its simplest case, and the commit that fixed it. Hashes are in `git log`.
+
+1. **`e0c7ea0` — 2026-09-18 — the failure the README named didn't exist.** The README claimed dividing by zero was the one failure the system could produce and would show `Error`. Pushing on it: entering a number requires at least one tap, so a `0` divisor can never be committed — the `Error` branch is unreachable through the UI. Changed the README to say so honestly and kept the guard as defensive code, rather than advertising a failure that can't happen.
+
+2. **`07f859c` — 2026-09-18 — the accent stopped meaning "effort" at scale.** The intent reserves terracotta to mean effort. Watching a tally climb past ~20, the unbroken row of pills read as a warning bar, not a count — the color tipped into pressure. Changed the marks to group in fives, so a long count reads as rhythmic clusters and the color keeps its single meaning at any length.
+
+3. **`c440c88` — 2026-09-22 — a number after `=` errored.** Reproduce: `2 + 2 = 4`, then one tap showed `4 1` (two numbers, no operator), and `=` then threw `Error`. A tap after a result now starts a fresh calculation; an operator after a result still continues from it.
+
+4. **`3fd6e95` — 2026-09-22 — the seam lied above 40.** Reproduce: 45 taps showed `45` on the numeral but only 40 marks, so the seam under-reported the real count with no signal. Past the 40-mark cap the panel now appends a `+N more` indicator, keeping the seam honest at any count.
+
 ## Back-end architecture
 
 **What data does this tool need?**
