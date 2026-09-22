@@ -159,6 +159,15 @@ function commitTally() {
   return true;
 }
 
+// One key (Shift) cycles + − × ÷. First press after a number picks +, and
+// each further press without a new number swaps to the next operator.
+let opCycleIdx = -1;
+function cycleOperator() {
+  const lastIsOp = isOp(tokens[tokens.length - 1]);
+  opCycleIdx = lastIsOp ? (opCycleIdx + 1) % OPS.length : 0;
+  pressOperator(OPS[opCycleIdx]);
+}
+
 function pressOperator(op) {
   if (tokens.length === 0 && !tallyTouched) return;
 
@@ -239,6 +248,7 @@ keys.forEach((key) => {
 // keys are deliberately NOT mapped — you press space seven times for a 7.
 const KEY_ACTIONS = {
   ' ': pressTally,
+  'Shift': cycleOperator,
   '+': () => pressOperator('+'),
   '-': () => pressOperator('−'),
   '*': () => pressOperator('×'),
