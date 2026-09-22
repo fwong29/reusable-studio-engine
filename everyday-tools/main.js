@@ -208,18 +208,28 @@ keys.forEach((key) => {
 
 // Keyboard input keeps the cost: one keypress is one tap, so the number-row
 // keys are deliberately NOT mapped — you press space seven times for a 7.
+const KEY_ACTIONS = {
+  ' ': pressTally,
+  '+': () => pressOperator('+'),
+  '-': () => pressOperator('−'),
+  '*': () => pressOperator('×'),
+  '/': () => pressOperator('÷'),
+  'Enter': pressEquals,
+  '=': pressEquals,
+  'Backspace': pressBackspace,
+  'Escape': pressClear,
+};
+
 window.addEventListener('keydown', (e) => {
-  switch (e.key) {
-    case ' ':        pressTally(); break;
-    case '+':        pressOperator('+'); break;
-    case '-':        pressOperator('−'); break;
-    case '*':        pressOperator('×'); break;
-    case '/':        pressOperator('÷'); break;
-    case 'Enter':
-    case '=':        pressEquals(); break;
-    case 'Backspace': pressBackspace(); break;
-    case 'Escape':   pressClear(); break;
-  }
+  const action = KEY_ACTIONS[e.key];
+  if (!action) return;
+  // Ignore auto-repeat: holding a key must not machine-gun taps, or a held
+  // space would build a big number for free — defeating the one-press cost.
+  if (e.repeat) { e.preventDefault(); return; }
+  // Prevent the key's default: space scrolling, Backspace navigating back,
+  // and space re-activating a focused on-screen key (a double tap).
+  e.preventDefault();
+  action();
 });
 
 render();
