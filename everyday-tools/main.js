@@ -16,27 +16,39 @@ let justEvaluated = false;
 
 // Opt-in per-tap tick, off by default. A soft click makes "each tap is one
 // act" physical, like an adding machine — but only if the user asks for it.
-const audio = new (window.AudioContext || window.webkitAudioContext)();
+// The AudioContext is created lazily, on the gesture that enables sound, and
+// resumed if suspended. Chrome's autoplay policy suspends a context built at
+// page load until a user gesture, which would drop the first ticks; deferring
+// creation to the toggle click avoids that and the load-time console warning.
+let audio = null;
 let soundOn = false;
+
+function ensureAudio() {
+  if (!audio) audio = new (window.AudioContext || window.webkitAudioContext)();
+  if (audio.state === 'suspended') audio.resume();
+  return audio;
+}
 
 function playTick() {
   if (!soundOn) return;
-  const osc = audio.createOscillator();
-  const gain = audio.createGain();
+  const ctx = ensureAudio();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
   osc.type = 'triangle';
   osc.frequency.value = 220;
-  const t = audio.currentTime;
+  const t = ctx.currentTime;
   gain.gain.setValueAtTime(0.0001, t);
   gain.gain.exponentialRampToValueAtTime(0.4, t + 0.005);
   gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
-  osc.connect(gain).connect(audio.destination);
+  osc.connect(gain).connect(ctx.destination);
   osc.start(t);
-  osc.stop(t + 0.09);
+  osc.stop(t + 0.11);
 }
 
 const soundToggle = document.getElementById('soundToggle');
 soundToggle.addEventListener('click', () => {
   soundOn = !soundOn;
+  if (soundOn) ensureAudio();
   soundToggle.setAttribute('aria-pressed', String(soundOn));
   soundToggle.textContent = 'tap sound: ' + (soundOn ? 'on' : 'off');
   soundToggle.title = 'Tap sound (' + (soundOn ? 'on' : 'off') + ')';
