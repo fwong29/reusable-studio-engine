@@ -12,6 +12,7 @@ const MAX_MARKS = 40;
 let tokens = [];
 let currentTally = 0;
 let tallyTouched = false;
+let justEvaluated = false;
 
 function pulse(el, cls) {
   el.classList.remove(cls);
@@ -100,6 +101,12 @@ function evaluate(list) {
 }
 
 function pressTally() {
+  // Tapping a number after a result starts a fresh calculation, rather than
+  // appending to the result and producing a malformed expression.
+  if (justEvaluated) {
+    tokens = [];
+    justEvaluated = false;
+  }
   currentTally += 1;
   tallyTouched = true;
   render({ tap: true });
@@ -116,6 +123,7 @@ function commitTally() {
 function pressOperator(op) {
   if (tokens.length === 0 && !tallyTouched) return;
 
+  justEvaluated = false;
   const landed = commitTally();
 
   if (isOp(tokens[tokens.length - 1])) {
@@ -150,6 +158,7 @@ function pressEquals() {
   }
 
   tokens = [String(Math.round(result * 1e10) / 1e10)];
+  justEvaluated = true;
   render({ result: true });
 }
 
@@ -157,10 +166,12 @@ function pressClear() {
   tokens = [];
   currentTally = 0;
   tallyTouched = false;
+  justEvaluated = false;
   render({ clear: true });
 }
 
 function pressBackspace() {
+  justEvaluated = false;
   if (currentTally > 0) {
     currentTally -= 1;
     tallyTouched = currentTally > 0;
