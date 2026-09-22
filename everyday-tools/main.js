@@ -27,8 +27,8 @@ function playTick() {
   osc.frequency.value = 220;
   const t = audio.currentTime;
   gain.gain.setValueAtTime(0.0001, t);
-  gain.gain.exponentialRampToValueAtTime(0.12, t + 0.005);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
+  gain.gain.exponentialRampToValueAtTime(0.4, t + 0.005);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
   osc.connect(gain).connect(audio.destination);
   osc.start(t);
   osc.stop(t + 0.09);
