@@ -23,12 +23,10 @@
       <div class="tally-marks" id="tallyMarks"></div>
     </button>
 
-    <div class="row">
-      <button class="key key--op" data-type="op" data-value="÷">÷</button>
-      <button class="key key--op" data-type="op" data-value="×">×</button>
-      <button class="key key--op" data-type="op" data-value="−">−</button>
-      <button class="key key--op" data-type="op" data-value="+">+</button>
-    </div>
+    <button class="opkey" id="opKey" type="button" aria-label="operator — tap to cycle">
+      <span class="opkey-glyph" id="opGlyph">+</span>
+      <div class="opkey-pips" id="opPips"><span></span><span></span><span></span><span></span></div>
+    </button>
 
     <div class="row">
       <button class="key key--control" data-type="control" data-value="C">C</button>

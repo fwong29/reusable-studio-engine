@@ -159,13 +159,24 @@ function commitTally() {
   return true;
 }
 
-// One key (Shift) cycles + − × ÷. First press after a number picks +, and
-// each further press without a new number swaps to the next operator.
+// One operator key (and Shift) cycles + − × ÷, mirroring the single number
+// key. First press after a number picks +; each further press without a new
+// number swaps to the next operator and wraps around.
+const opGlyphEl = document.getElementById('opGlyph');
+const opPipsEl = document.getElementById('opPips');
 let opCycleIdx = -1;
+
+function updateOpDisplay() {
+  opGlyphEl.textContent = opCycleIdx < 0 ? '+' : OPS[opCycleIdx];
+  Array.from(opPipsEl.children).forEach((p, i) => p.classList.toggle('on', i === opCycleIdx));
+}
+
 function cycleOperator() {
+  if (tokens.length === 0 && !tallyTouched) return;
   const lastIsOp = isOp(tokens[tokens.length - 1]);
   opCycleIdx = lastIsOp ? (opCycleIdx + 1) % OPS.length : 0;
   pressOperator(OPS[opCycleIdx]);
+  updateOpDisplay();
 }
 
 function pressOperator(op) {
@@ -207,6 +218,8 @@ function pressEquals() {
 
   tokens = [String(Math.round(result * 1e10) / 1e10)];
   justEvaluated = true;
+  opCycleIdx = -1;
+  updateOpDisplay();
   render({ result: true });
 }
 
@@ -215,6 +228,8 @@ function pressClear() {
   currentTally = 0;
   tallyTouched = false;
   justEvaluated = false;
+  opCycleIdx = -1;
+  updateOpDisplay();
   render({ clear: true });
 }
 
@@ -230,12 +245,12 @@ function pressBackspace() {
 }
 
 tallyButton.addEventListener('click', pressTally);
+document.getElementById('opKey').addEventListener('click', cycleOperator);
 
 keys.forEach((key) => {
   const type = key.dataset.type;
   key.addEventListener('click', () => {
-    if (type === 'op') pressOperator(key.dataset.value);
-    else if (type === 'control') {
+    if (type === 'control') {
       const value = key.dataset.value;
       if (value === 'C') pressClear();
       else if (value === '⌫') pressBackspace();
