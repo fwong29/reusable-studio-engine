@@ -206,4 +206,20 @@ keys.forEach((key) => {
   });
 });
 
+// Keyboard input keeps the cost: one keypress is one tap, so the number-row
+// keys are deliberately NOT mapped — you press space seven times for a 7.
+window.addEventListener('keydown', (e) => {
+  switch (e.key) {
+    case ' ':        pressTally(); break;
+    case '+':        pressOperator('+'); break;
+    case '-':        pressOperator('−'); break;
+    case '*':        pressOperator('×'); break;
+    case '/':        pressOperator('÷'); break;
+    case 'Enter':
+    case '=':        pressEquals(); break;
+    case 'Backspace': pressBackspace(); break;
+    case 'Escape':   pressClear(); break;
+  }
+});
+
 render();
