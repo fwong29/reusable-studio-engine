@@ -34,7 +34,7 @@
   h1,h2,h3,.disp{font-family:"Bungee", "Nunito", system-ui, sans-serif;font-weight:400;letter-spacing:.01em;text-wrap:balance;margin:0}
   .mono{font-family:"DM Mono", ui-monospace, Menlo, monospace}
   button{font-family:inherit;font-size:1rem;cursor:pointer;border:0}
-  button:focus-visible, input:focus-visible, select:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+  button:focus-visible, input:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
   [hidden]{display:none !important}
 
   /* ---------- masthead ---------- */
@@ -47,7 +47,7 @@
   }
   .logo .a{font-size:clamp(22px,5vw,34px)}
   .logo .b{font-size:clamp(22px,5vw,34px);color:var(--ink)}
-  .tagline{font-weight:900;color:var(--dim);font-size:.95rem;max-width:34ch}
+  .tagline{font-weight:900;color:var(--dim);font-size:.95rem;max-width:36ch}
 
   .panel{
     background:linear-gradient(180deg, var(--ink2), var(--ink));
@@ -56,23 +56,14 @@
   }
 
   /* ---------- setup ---------- */
-  .setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-  @media (max-width:640px){.setup-grid{grid-template-columns:1fr}}
-  label.fld{display:block;font-weight:900;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-  input[type=text], select{
-    width:100%;background:var(--ink3);color:var(--cream);
-    border:3px solid var(--line);border-radius:14px;
-    padding:12px 14px;font-size:1.05rem;font-weight:700;font-family:inherit;
-  }
-  .pcard{border-radius:18px;padding:16px;border:3px solid}
-  .pcard.a{border-color:var(--magenta);background:rgba(255,46,136,.10)}
-  .pcard.b{border-color:var(--cyan);background:rgba(34,225,255,.10)}
+  .fld{display:block;font-weight:900;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
   .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
   .chip{
     background:var(--ink3);color:var(--cream);border:3px solid var(--line);
     border-radius:999px;padding:8px 16px;font-weight:900;font-size:.9rem;
   }
   .chip[aria-pressed="true"]{background:var(--lime);color:#14210a;border-color:var(--lime)}
+  .chip .sm{font-weight:700;opacity:.75;font-size:.8em}
   .btn{
     background:var(--lime);color:#14210a;border-radius:16px;
     padding:14px 26px;font-weight:900;font-size:1.05rem;
@@ -81,25 +72,31 @@
   .btn:active{transform:translateY(4px);box-shadow:0 1px 0 #6d9c15}
   .btn.ghost{background:transparent;color:var(--cream);border:3px solid var(--line);box-shadow:none;padding:11px 20px}
   .btn.small{padding:9px 16px;font-size:.9rem;box-shadow:0 4px 0 #6d9c15}
-  .rules{margin-top:18px;display:grid;gap:8px;font-size:.95rem;color:var(--dim)}
-  .rules b{color:var(--cream)}
-  .num{display:inline-grid;place-items:center;width:1.6em;height:1.6em;border-radius:50%;background:var(--orange);color:#210c02;font-weight:900;font-size:.78rem;margin-right:.5em}
+  .btn.ghost.small{box-shadow:none}
+
+  .how{margin-top:22px;display:grid;gap:10px;font-size:.95rem;color:var(--dim)}
+  .how b{color:var(--cream)}
+  .num{display:inline-grid;place-items:center;width:1.7em;height:1.7em;border-radius:50%;background:var(--orange);color:#210c02;font-weight:900;font-size:.76rem;margin-right:.55em;vertical-align:1px}
+  .endtable{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+  @media (max-width:560px){.endtable{grid-template-columns:1fr}}
+  .endcard{border:3px solid var(--line);border-radius:16px;padding:12px 14px;background:var(--ink3)}
+  .endcard h4{margin:0 0 6px;font-family:"Bungee",sans-serif;font-weight:400;font-size:1.1rem;color:var(--gold)}
+  .endcard.er h4{color:var(--cyan)}
+  .endcard.ir h4{color:var(--lime)}
+  .endcard ul{margin:0;padding-left:16px;font-family:"DM Mono",monospace;font-size:.86rem;color:var(--cream)}
 
   /* ---------- hud ---------- */
   .hud{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap;margin-bottom:14px}
-  .hudbox{background:var(--ink2);border:3px solid var(--line);border-radius:16px;padding:10px 16px;min-width:104px}
+  .hudbox{background:var(--ink2);border:3px solid var(--line);border-radius:16px;padding:10px 16px;min-width:100px}
   .hudlab{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:900}
   .hudval{font-size:1.5rem;font-weight:900;font-variant-numeric:tabular-nums}
-  .hudbox.turn{background:var(--magenta);border-color:var(--magenta);color:#1a0616;flex:1 1 200px}
-  .hudbox.turn .hudlab{color:#5c0026}
-  .hudbox.turn.p2{background:var(--cyan);color:#052229}
-  .hudbox.turn.p2 .hudlab{color:#05505e}
   .hudbox.clock .hudval{color:var(--gold)}
+  .hudbox.clock.low{border-color:var(--magenta)}
   .hudbox.clock.low .hudval{color:var(--magenta)}
-  .hud .spacer{flex:1}
+  .hudbox.sc .hudval{color:var(--lime)}
 
   /* ---------- play ---------- */
-  .stage{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+  .stage{display:grid;grid-template-columns:1fr 290px;gap:16px;align-items:start}
   @media (max-width:820px){.stage{grid-template-columns:1fr}}
 
   .verbcard{position:relative;overflow:hidden}
@@ -108,20 +105,27 @@
     background:radial-gradient(closest-side, rgba(255,201,60,.18), transparent);
     pointer-events:none;
   }
+  .tags{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .kind{display:inline-block;background:var(--gold);color:#2b1a00;font-weight:900;
     padding:5px 12px;border-radius:999px;font-size:.78rem;letter-spacing:.06em}
   .kind.i{background:var(--cyan);color:#052229}
   .kind.e{background:var(--orange);color:#210c02}
+  .kind.u{background:var(--lime);color:#14210a}
+  .tag2{background:var(--ink3);border:2px solid var(--line);color:var(--cream);font-weight:900;
+    padding:4px 11px;border-radius:999px;font-size:.76rem;letter-spacing:.06em}
   .inf{font-size:clamp(38px,9vw,64px);line-height:1;margin:12px 0 4px}
   .inf .hot{color:var(--magenta)}
   .gloss{color:var(--dim);font-style:italic;font-weight:700}
-  .ask{margin-top:18px;font-size:1.05rem;font-weight:900;color:var(--dim)}
+  .ask{margin-top:18px;font-size:1rem;font-weight:900;color:var(--dim)}
   .subj{display:inline-block;background:var(--ink3);border:3px dashed var(--lime);color:var(--lime);
     border-radius:14px;padding:6px 16px;font-size:clamp(20px,4.6vw,30px);font-family:"Bungee",sans-serif;margin-top:6px}
+  .subjen{color:var(--dim);font-size:.85rem;font-weight:700;margin-top:6px}
 
-  .answer{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-  #resp{flex:1 1 220px;font-size:clamp(20px,5vw,30px);font-family:"DM Mono",monospace;font-weight:500;
-    text-align:center;letter-spacing:.02em;border-color:var(--cyan)}
+  .answer{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+  #resp{flex:1 1 220px;width:100%;background:var(--ink3);color:var(--cream);
+    border:3px solid var(--cyan);border-radius:14px;padding:12px 14px;
+    font-size:clamp(20px,5vw,30px);font-family:"DM Mono",monospace;font-weight:500;
+    text-align:center;letter-spacing:.02em}
   .accents{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
   .akey{background:var(--ink3);border:2px solid var(--line);color:var(--cream);border-radius:10px;
     width:40px;height:38px;font-size:1.05rem;font-weight:700;font-family:"DM Mono",monospace}
@@ -132,42 +136,52 @@
   .verdict.ok{border-color:var(--lime);background:rgba(184,255,60,.12)}
   .verdict.near{border-color:var(--gold);background:rgba(255,201,60,.12)}
   .verdict.no{border-color:var(--magenta);background:rgba(255,46,136,.12)}
-  .verdict .vhead{font-family:"Bungee",sans-serif;font-size:1.25rem;display:block;margin-bottom:4px}
-  .built{font-family:"DM Mono",monospace;font-size:clamp(20px,5vw,30px);margin:6px 0}
+  .verdict .vhead{font-family:"Bungee",sans-serif;font-size:1.2rem;display:block;margin-bottom:4px}
+  .built{font-family:"DM Mono",monospace;font-size:clamp(20px,5vw,30px);margin:8px 0 4px}
   .built .stem{color:var(--magenta)}
   .built .end{color:var(--cyan)}
-  .built .plus{color:var(--dim);font-size:.6em;padding:0 .15em}
-  .why{font-size:.95rem;color:var(--dim);margin-top:4px}
+  .built .plus{color:var(--dim);font-size:.6em;padding:0 .2em}
+  .legend{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;font-weight:900;color:var(--dim)}
+  .legend .s{color:var(--magenta)}
+  .legend .e{color:var(--cyan)}
+  .why{font-size:.95rem;color:var(--dim);margin-top:6px}
   .why b{color:var(--cream)}
 
-  /* ---------- boot ---------- */
-  .boot{margin-top:0}
+  /* ---------- boot + helper ---------- */
   .bootlab{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:900;margin-bottom:8px}
   .bootgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-  .cell{background:var(--ink3);border:2px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.84rem;font-weight:700}
-  .cell.in{background:rgba(255,46,136,.22);border-color:var(--magenta)}
+  .cell{background:var(--ink3);border:2px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.8rem;font-weight:700;color:var(--dim)}
+  .cell.in{background:rgba(255,46,136,.22);border-color:var(--magenta);color:var(--cream)}
   .cell.now{outline:3px solid var(--lime);outline-offset:1px}
-  .cell small{display:block;color:var(--dim);font-size:.66rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .cell small{display:block;color:var(--cream);font-size:.72rem;font-weight:900;letter-spacing:.04em;margin-bottom:2px}
+  .cell.in small{color:var(--magenta)}
   .bootnote{font-size:.78rem;color:var(--dim);margin-top:10px}
+  .side{display:grid;gap:12px}
+  .endsnap{font-family:"DM Mono",monospace;font-size:.9rem;display:grid;gap:3px;margin-top:8px}
+  .endsnap div{display:flex;justify-content:space-between;gap:10px;color:var(--dim)}
+  .endsnap div.on{color:var(--lime);font-weight:500}
+  .endsnap b{color:var(--cream);font-weight:500}
+  .endsnap div.on b{color:var(--lime)}
 
-  .coach{margin-top:14px}
-  .coachbody{margin-top:10px;font-size:.92rem}
-  .coachbody .ans{font-family:"DM Mono",monospace;font-size:1.3rem;color:var(--lime);font-weight:500}
-  .coachbody .q{margin-top:8px;color:var(--gold);font-weight:900}
-  .tutortag{background:var(--orange);color:#210c02;font-weight:900;font-size:.68rem;letter-spacing:.14em;
-    text-transform:uppercase;padding:4px 10px;border-radius:999px}
-
-  /* ---------- swap + results ---------- */
-  .big{font-size:clamp(34px,11vw,76px);line-height:.95;margin:6px 0 10px}
+  /* ---------- results ---------- */
+  .big{font-size:clamp(34px,11vw,72px);line-height:.95;margin:6px 0 10px}
   .rainbow{background:linear-gradient(92deg,var(--magenta),var(--gold) 38%,var(--lime) 66%,var(--cyan));
     -webkit-background-clip:text;background-clip:text;color:transparent}
-  .score2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
-  @media (max-width:640px){.score2{grid-template-columns:1fr}}
-  .stat{display:flex;justify-content:space-between;border-bottom:2px dotted var(--line);padding:6px 0;font-weight:700}
+  .rescols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+  @media (max-width:700px){.rescols{grid-template-columns:1fr}}
+  .stat{display:flex;justify-content:space-between;border-bottom:2px dotted var(--line);padding:7px 0;font-weight:700}
   .stat span:last-child{font-variant-numeric:tabular-nums;font-weight:900}
-  .misslist{margin:8px 0 0;padding-left:18px;color:var(--dim);font-size:.9rem}
-  .misslist li{margin:2px 0}
-  .winner{display:inline-block;background:var(--gold);color:#2b1a00;font-weight:900;border-radius:999px;padding:4px 12px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase}
+  .subhead{font-weight:900;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:16px 0 6px}
+  .bar{display:grid;grid-template-columns:78px 1fr 46px;gap:10px;align-items:center;margin:6px 0;font-weight:900;font-size:.88rem}
+  .bar .track{height:14px;background:var(--ink3);border-radius:999px;overflow:hidden;border:2px solid var(--line)}
+  .bar .fill{height:100%;background:var(--lime)}
+  .bar .fill.mid{background:var(--gold)}
+  .bar .fill.low{background:var(--magenta)}
+  .bar em{font-style:normal;font-family:"DM Mono",monospace;font-variant-numeric:tabular-nums;text-align:right}
+  .misslist{margin:6px 0 0;padding-left:18px;color:var(--dim);font-size:.92rem}
+  .misslist li{margin:3px 0}
+  .misslist b{color:var(--cream);font-family:"DM Mono",monospace}
+  .callout{margin-top:16px;border:3px solid var(--gold);background:rgba(255,201,60,.12);border-radius:16px;padding:14px 16px;font-weight:700}
 
   canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9}
   @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
@@ -180,129 +194,146 @@
 
   <div class="top">
     <div class="logo"><span class="a">Cambio</span><span class="b">de Raíz</span></div>
-    <div class="tagline">Tutoría en parejas — verbos con cambio de raíz y las terminaciones -ar / -er / -ir.</div>
+    <div class="tagline">Type the Spanish stem-changers — and get the -ar / -er / -ir ending right.</div>
   </div>
 
   <!-- ============ SETUP ============ -->
   <section id="setup" class="panel">
-    <h2 style="font-size:clamp(20px,4.4vw,28px)">Armen la pareja</h2>
-    <div class="setup-grid">
-      <div class="pcard a">
-        <label class="fld" for="n1">Estudiante 1</label>
-        <input type="text" id="n1" value="Estudiante 1" autocomplete="off">
-      </div>
-      <div class="pcard b">
-        <label class="fld" for="n2">Estudiante 2</label>
-        <input type="text" id="n2" value="Estudiante 2" autocomplete="off">
-      </div>
+    <h2 style="font-size:clamp(20px,4.4vw,28px)">How to play</h2>
+    <div class="how">
+      <div><span class="num">1</span>You get an infinitive and a subject pronoun. <b>Type the full conjugated form</b> — verb only, no pronoun.</div>
+      <div><span class="num">2</span>Every answer is two decisions: <b>does the stem change here?</b> and <b>which ending does this verb take?</b> You're scored on both.</div>
+      <div><span class="num">3</span>Miss it and the game shows you the form split into <b><span style="color:var(--magenta)">stem</span> + <span style="color:var(--cyan)">ending</span></b> and tells you which half you got wrong.</div>
+      <div><span class="num">4</span>Beat the clock. Streaks multiply your points. At the end you get a breakdown of what to review.</div>
     </div>
 
-    <div style="margin-top:16px">
-      <span class="fld">Minutos por estudiante</span>
+    <div class="endtable">
+      <div class="endcard ar"><h4>-ar endings</h4><ul><li>o · as · a</li><li>amos · áis · an</li></ul></div>
+      <div class="endcard er"><h4>-er endings</h4><ul><li>o · es · e</li><li>emos · éis · en</li></ul></div>
+      <div class="endcard ir"><h4>-ir endings</h4><ul><li>o · es · e</li><li>imos · ís · en</li></ul></div>
+    </div>
+    <p class="hint" style="margin-top:10px">-er and -ir only split apart in <b style="color:var(--cream)">nosotros</b> and <b style="color:var(--cream)">vosotros</b>. That's where most points get lost.</p>
+
+    <div style="margin-top:22px">
+      <span class="fld">Session length</span>
       <div class="chips" id="minchips">
-        <button class="chip" data-min="5" aria-pressed="false">5</button>
-        <button class="chip" data-min="10" aria-pressed="true">10</button>
-        <button class="chip" data-min="15" aria-pressed="false">15</button>
-        <button class="chip" data-min="20" aria-pressed="false">20</button>
+        <button class="chip" data-min="3" aria-pressed="false">3 min</button>
+        <button class="chip" data-min="5" aria-pressed="false">5 min</button>
+        <button class="chip" data-min="10" aria-pressed="true">10 min</button>
+        <button class="chip" data-min="15" aria-pressed="false">15 min</button>
       </div>
     </div>
 
-    <div style="margin-top:16px">
-      <span class="fld">Personas incluidas</span>
+    <div style="margin-top:18px">
+      <span class="fld">Stem changes to drill</span>
+      <div class="chips" id="typechips">
+        <button class="chip" data-ch="e → ie" aria-pressed="true">e → ie</button>
+        <button class="chip" data-ch="o → ue" aria-pressed="true">o → ue</button>
+        <button class="chip" data-ch="e → i" aria-pressed="true">e → i <span class="sm">(-ir only)</span></button>
+        <button class="chip" data-ch="u → ue" aria-pressed="true">u → ue <span class="sm">(jugar)</span></button>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <span class="fld">Options</span>
       <div class="chips">
-        <button class="chip" id="vos" aria-pressed="false">Incluir vosotros</button>
+        <button class="chip" id="vos" aria-pressed="false">Include vosotros</button>
       </div>
     </div>
 
-    <div class="rules">
-      <div><span class="num">1</span><b>El que escribe</b> teclea la forma conjugada completa. Sin pronombre, solo el verbo.</div>
-      <div><span class="num">2</span><b>El tutor</b> mira la tarjeta naranja, tiene la respuesta y una pregunta para hacer después de cada intento.</div>
-      <div><span class="num">3</span>Suena la campana, <b>cambian de silla</b> y el tutor pasa a escribir. Tiempo igual para los dos.</div>
-    </div>
-
-    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn" id="start">¡Empezar!</button>
-    </div>
+    <div style="margin-top:22px"><button class="btn" id="start">Start playing</button></div>
   </section>
 
   <!-- ============ PLAY ============ -->
   <section id="play" hidden>
     <div class="hud">
-      <div class="hudbox turn" id="turnbox">
-        <div class="hudlab">Escribe ahora</div>
-        <div class="hudval" id="turnname">—</div>
-      </div>
       <div class="hudbox clock" id="clockbox">
-        <div class="hudlab">Reloj</div>
+        <div class="hudlab">Time left</div>
         <div class="hudval mono" id="clock">10:00</div>
       </div>
-      <div class="hudbox">
-        <div class="hudlab">Puntos</div>
+      <div class="hudbox sc">
+        <div class="hudlab">Score</div>
         <div class="hudval" id="pts">0</div>
       </div>
       <div class="hudbox">
-        <div class="hudlab">Racha</div>
+        <div class="hudlab">Streak</div>
         <div class="hudval" id="streak">0</div>
       </div>
-      <button class="btn ghost small" id="pause" style="align-self:center">Pausa</button>
+      <div class="hudbox">
+        <div class="hudlab">Correct</div>
+        <div class="hudval" id="tally">0/0</div>
+      </div>
+      <button class="btn ghost small" id="pause" style="align-self:center">Pause</button>
     </div>
 
     <div class="stage">
       <div class="panel verbcard">
-        <span class="kind" id="kind">o → ue</span>
+        <div class="tags">
+          <span class="kind" id="kind">o → ue</span>
+          <span class="tag2" id="fam">-ir verb</span>
+        </div>
         <div class="inf disp" id="inf">dormir</div>
         <div class="gloss" id="gloss">to sleep</div>
 
-        <div class="ask">Conjuga para:</div>
+        <div class="ask">Conjugate for:</div>
         <div class="subj" id="subj">nosotros</div>
+        <div class="subjen" id="subjen">we</div>
 
         <div class="answer">
-          <input type="text" id="resp" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="escribe aquí…">
-          <button class="btn" id="go">Enviar</button>
+          <input type="text" id="resp" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="type it…">
+          <button class="btn" id="go">Check</button>
         </div>
         <div class="accents" id="accents"></div>
-        <div class="hint">Enter para enviar. Los acentos importan — usa los botones si tu teclado no los tiene.</div>
+        <div class="hint">Press Enter to check. Accents count — tap the keys above if you can't type them.</div>
 
         <div id="verdict" hidden></div>
       </div>
 
-      <div>
-        <div class="panel boot">
-          <div class="bootlab">La bota — dónde cambia el radical</div>
+      <div class="side">
+        <div class="panel">
+          <div class="bootlab">The boot — where the stem changes</div>
           <div class="bootgrid" id="bootgrid"></div>
-          <div class="bootnote" id="bootnote">Nosotros y vosotros se quedan fuera de la bota: no cambian nunca.</div>
+          <div class="bootnote">Nosotros and vosotros sit outside the boot, so their stem never changes.</div>
         </div>
 
-        <div class="panel coach">
-          <span class="tutortag">Tarjeta del tutor</span>
-          <div style="margin-top:10px"><button class="btn ghost small" id="peek">Ver respuesta</button></div>
-          <div class="coachbody" id="coachbody" hidden>
-            <div class="ans mono" id="coachans">—</div>
-            <div id="coachrule" class="why">—</div>
-            <div class="q" id="coachq">—</div>
+        <div class="panel">
+          <div class="bootlab" id="endlab">-ir endings</div>
+          <div class="endsnap" id="endsnap"></div>
+        </div>
+
+        <div class="panel">
+          <div class="bootlab">Stuck?</div>
+          <div class="chips" style="margin-top:8px">
+            <button class="btn ghost small" id="hintbtn">Show the rule</button>
+            <button class="btn ghost small" id="skipbtn">Skip</button>
           </div>
+          <div class="why" id="hintbox" hidden></div>
         </div>
 
-        <div style="margin-top:12px"><button class="btn ghost small" id="endturn">Terminar turno</button></div>
+        <button class="btn ghost small" id="endnow">End session</button>
       </div>
     </div>
   </section>
 
-  <!-- ============ SWAP ============ -->
-  <section id="swap" class="panel" hidden style="text-align:center">
-    <div class="disp big rainbow">¡Cambio!</div>
-    <p style="font-size:1.15rem;font-weight:900" id="swaptext">—</p>
-    <p style="color:var(--dim);max-width:52ch;margin:0 auto 18px">Cambien de silla. El que acaba de escribir ahora es el tutor: lee la tarjeta naranja y haz la pregunta después de cada intento.</p>
-    <button class="btn" id="go2">Empezar el segundo turno</button>
-  </section>
-
   <!-- ============ RESULTS ============ -->
   <section id="over" class="panel" hidden>
-    <div class="disp big rainbow">Marcador</div>
-    <div class="score2" id="board"></div>
-    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn" id="again">Otra ronda</button>
+    <div class="disp big rainbow">Time!</div>
+    <div class="rescols">
+      <div>
+        <div class="subhead">Your run</div>
+        <div id="stats"></div>
+      </div>
+      <div>
+        <div class="subhead">Accuracy by verb ending</div>
+        <div id="bytype"></div>
+        <div class="subhead">What went wrong</div>
+        <div id="byerr"></div>
+      </div>
     </div>
+    <div class="subhead">Verbs to review</div>
+    <ul class="misslist" id="misslist"></ul>
+    <div class="callout" id="advice"></div>
+    <div style="margin-top:20px"><button class="btn" id="again">Play again</button></div>
   </section>
 
 </div>
@@ -311,7 +342,7 @@
 (function(){
   "use strict";
 
-  /* ---------------- verbs ---------------- */
+  /* ---------------- data ---------------- */
   var ENDINGS = {
     ar:["o","as","a","amos","áis","an"],
     er:["o","es","e","emos","éis","en"],
@@ -319,9 +350,10 @@
   };
   var PEOPLE = ["yo","tú","él / ella / usted","nosotros","vosotros","ellos / ellas / ustedes"];
   var SHORT  = ["yo","tú","él/ella/Ud.","nosotros","vosotros","ellos/Uds."];
+  var ENGL   = ["I","you","he / she / you (formal)","we","you all (Spain)","they / you all"];
 
-  function V(inf,type,change,stem,changed,gloss,ov){
-    return {inf:inf,type:type,change:change,stem:stem,changed:changed,gloss:gloss,ov:ov||{}};
+  function V(inf,type,change,stem,changed,gloss){
+    return {inf:inf,type:type,change:change,stem:stem,changed:changed,gloss:gloss};
   }
   var VERBS = [
     V("pensar","ar","e → ie","pens","piens","to think"),
@@ -334,9 +366,7 @@
     V("preferir","ir","e → ie","prefer","prefier","to prefer"),
     V("sentir","ir","e → ie","sent","sient","to feel"),
     V("mentir","ir","e → ie","ment","mient","to lie"),
-    V("tener","er","e → ie","ten","tien","to have",{0:"tengo"}),
-    V("venir","ir","e → ie","ven","vien","to come",{0:"vengo"}),
-    V("contar","ar","o → ue","cont","cuent","to count / tell"),
+    V("contar","ar","o → ue","cont","cuent","to count / to tell"),
     V("almorzar","ar","o → ue","almorz","almuerz","to eat lunch"),
     V("recordar","ar","o → ue","record","recuerd","to remember"),
     V("encontrar","ar","o → ue","encontr","encuentr","to find"),
@@ -344,54 +374,48 @@
     V("soñar","ar","o → ue","soñ","sueñ","to dream"),
     V("poder","er","o → ue","pod","pued","to be able to"),
     V("volver","er","o → ue","volv","vuelv","to return"),
+    V("devolver","er","o → ue","devolv","devuelv","to give back"),
     V("dormir","ir","o → ue","dorm","duerm","to sleep"),
     V("morir","ir","o → ue","mor","muer","to die"),
-    V("jugar","ar","u → ue","jug","jueg","to play"),
     V("pedir","ir","e → i","ped","pid","to ask for"),
     V("servir","ir","e → i","serv","sirv","to serve"),
     V("repetir","ir","e → i","repet","repit","to repeat"),
     V("vestir","ir","e → i","vest","vist","to dress"),
-    V("seguir","ir","e → i","segu","sigu","to follow",{0:"sigo"}),
-    V("decir","ir","e → i","dec","dic","to say",{0:"digo"})
+    V("competir","ir","e → i","compet","compit","to compete"),
+    V("jugar","ar","u → ue","jug","jueg","to play")
   ];
 
   function inBoot(i){ return i!==3 && i!==4; }
   function stemOf(v,i){ return inBoot(i) ? v.changed : v.stem; }
-  function formOf(v,i){
-    if(v.ov[i]) return v.ov[i];
-    return stemOf(v,i) + ENDINGS[v.type][i];
-  }
-  function endingOf(v,i){ return ENDINGS[v.type][i]; }
+  function endOf(v,i){ return ENDINGS[v.type][i]; }
+  function formOf(v,i){ return stemOf(v,i) + endOf(v,i); }
 
   /* ---------------- helpers ---------------- */
   function strip(s){ return s.normalize("NFD").replace(/[̀-ͯ]/g,""); }
   function clean(s){
     s = s.toLowerCase().trim().replace(/\s+/g," ");
-    s = s.replace(/^(yo|tú|tu|él|el|ella|usted|ud\.?|nosotros|nosotras|vosotros|vosotras|ellos|ellas|ustedes|uds\.?)\s+/,"");
-    return s;
+    return s.replace(/^(yo|tú|tu|él|el|ella|usted|ud\.?|nosotros|nosotras|vosotros|vosotras|ellos|ellas|ustedes|uds\.?)\s+/,"");
   }
   function $(id){ return document.getElementById(id); }
   function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
   function esc(s){ return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];}); }
+  function show(id){ ["setup","play","over"].forEach(function(x){ $(x).hidden = (x!==id); }); }
 
   /* ---------------- state ---------------- */
   var S = {
-    phase:"setup", minutes:10, vosotros:false, turn:0,
-    players:[
-      {name:"Estudiante 1", pts:0, right:0, near:0, tries:0, best:0, miss:{}},
-      {name:"Estudiante 2", pts:0, right:0, near:0, tries:0, best:0, miss:{}}
-    ],
-    streak:0, secs:600, running:false, q:null, answered:false, lastInf:""
+    phase:"setup", minutes:10, vosotros:false,
+    changes:{"e → ie":true,"o → ue":true,"e → i":true,"u → ue":true},
+    secs:600, running:false, q:null, answered:false, lastInf:"",
+    pts:0, streak:0, best:0, tries:0, right:0, accentOnly:0, skipped:0,
+    err:{stem:0, ending:0, both:0, accent:0},
+    byType:{ar:{t:0,r:0}, er:{t:0,r:0}, ir:{t:0,r:0}},
+    miss:{}
   };
 
-  var COACH_Q = [
-    "¿Esta forma está dentro de la bota? ¿Por qué sí o por qué no?",
-    "¿Cuál es la terminación y de qué tipo de verbo viene: -ar, -er o -ir?",
-    "Dilo otra vez en voz alta y señala la vocal que cambió.",
-    "¿Cómo sería con nosotros? ¿Cambia el radical ahí?",
-    "Dame una frase corta con esta forma.",
-    "Si fuera un verbo -er en vez de -ir, ¿qué terminación cambiaría?"
-  ];
+  function pool(){
+    var p = VERBS.filter(function(v){ return S.changes[v.change]; });
+    return p.length ? p : VERBS;
+  }
 
   /* ---------------- setup UI ---------------- */
   Array.prototype.forEach.call(document.querySelectorAll("#minchips .chip"), function(b){
@@ -401,68 +425,55 @@
       S.minutes = parseInt(b.dataset.min,10);
     });
   });
+  Array.prototype.forEach.call(document.querySelectorAll("#typechips .chip"), function(b){
+    b.addEventListener("click", function(){
+      var ch = b.dataset.ch, on = b.getAttribute("aria-pressed") === "true";
+      var count = Object.keys(S.changes).filter(function(k){ return S.changes[k]; }).length;
+      if(on && count <= 1) return;           // keep at least one on
+      S.changes[ch] = !on;
+      b.setAttribute("aria-pressed", S.changes[ch] ? "true" : "false");
+    });
+  });
   $("vos").addEventListener("click", function(){
     S.vosotros = !S.vosotros;
     $("vos").setAttribute("aria-pressed", S.vosotros ? "true" : "false");
   });
 
-  "áéíóúüñ¿¡".split("").forEach(function(ch){
+  "áéíóúüñ".split("").forEach(function(ch){
     var b = document.createElement("button");
     b.className = "akey"; b.type = "button"; b.textContent = ch;
     b.addEventListener("click", function(){ insert(ch); });
     $("accents").appendChild(b);
   });
   function insert(ch){
-    var el = $("resp"), s = el.selectionStart, e = el.selectionEnd;
-    el.value = el.value.slice(0,s) + ch + el.value.slice(e);
-    el.selectionStart = el.selectionEnd = s + ch.length;
+    var el = $("resp"), a = el.selectionStart, z = el.selectionEnd;
+    el.value = el.value.slice(0,a) + ch + el.value.slice(z);
+    el.selectionStart = el.selectionEnd = a + ch.length;
     el.focus();
   }
 
   /* ---------------- flow ---------------- */
-  function show(id){
-    ["setup","play","swap","over"].forEach(function(x){ $(x).hidden = (x!==id); });
+  $("start").addEventListener("click", begin);
+  $("again").addEventListener("click", function(){ show("setup"); S.phase = "setup"; });
+  $("endnow").addEventListener("click", finish);
+
+  function begin(){
+    S.phase="play"; S.secs = S.minutes*60; S.running=true; S.lastInf="";
+    S.pts=0; S.streak=0; S.best=0; S.tries=0; S.right=0; S.accentOnly=0; S.skipped=0;
+    S.err={stem:0,ending:0,both:0,accent:0};
+    S.byType={ar:{t:0,r:0},er:{t:0,r:0},ir:{t:0,r:0}};
+    S.miss={};
+    $("pause").textContent = "Pause";
+    show("play"); paintHud(); nextQ();
+  }
+  function finish(){
+    S.running=false; S.phase="over"; results(); show("over");
   }
 
-  $("start").addEventListener("click", function(){
-    S.players[0].name = ($("n1").value || "Estudiante 1").slice(0,18);
-    S.players[1].name = ($("n2").value || "Estudiante 2").slice(0,18);
-    S.turn = 0;
-    beginTurn();
-  });
-  $("go2").addEventListener("click", beginTurn);
-  $("again").addEventListener("click", function(){
-    S.players.forEach(function(p){ p.pts=0;p.right=0;p.near=0;p.tries=0;p.best=0;p.miss={}; });
-    show("setup"); S.phase="setup";
-  });
-  $("endturn").addEventListener("click", finishTurn);
-
-  function beginTurn(){
-    S.phase="play"; S.streak=0; S.secs = S.minutes*60; S.running=true; S.lastInf="";
-    show("play");
-    var t = $("turnbox");
-    t.classList.toggle("p2", S.turn===1);
-    $("turnname").textContent = S.players[S.turn].name;
-    $("pause").textContent = "Pausa";
-    paintHud(); nextQ();
-  }
-
-  function finishTurn(){
-    S.running=false;
-    if(S.turn===0){
-      S.turn=1; S.phase="swap";
-      $("swaptext").textContent = S.players[0].name + " terminó. Ahora escribe " + S.players[1].name + " — " + S.minutes + " minutos.";
-      show("swap");
-    } else {
-      S.phase="over"; results(); show("over");
-    }
-  }
-
-  /* ---------------- clock ---------------- */
   setInterval(function(){
     if(S.phase!=="play" || !S.running) return;
     S.secs--;
-    if(S.secs<=0){ S.secs=0; paintClock(); finishTurn(); return; }
+    if(S.secs<=0){ S.secs=0; paintClock(); finish(); return; }
     paintClock();
   }, 1000);
 
@@ -473,67 +484,90 @@
   }
   function paintHud(){
     paintClock();
-    $("pts").textContent = S.players[S.turn].pts;
+    $("pts").textContent = S.pts;
     $("streak").textContent = S.streak;
+    $("tally").textContent = (S.right + S.accentOnly) + "/" + S.tries;
   }
   $("pause").addEventListener("click", function(){
     S.running = !S.running;
-    $("pause").textContent = S.running ? "Pausa" : "Seguir";
+    $("pause").textContent = S.running ? "Pause" : "Resume";
   });
 
   /* ---------------- questions ---------------- */
   function nextQ(){
     var allowed = S.vosotros ? [0,1,2,3,4,5] : [0,1,2,3,5];
-    var v = pick(VERBS);
-    var guard = 0;
-    while(v.inf === S.lastInf && guard++ < 8) v = pick(VERBS);
+    var p = pool(), v = pick(p), guard = 0;
+    while(v.inf === S.lastInf && guard++ < 10 && p.length > 1) v = pick(p);
     S.lastInf = v.inf;
-    // make sure the "no change" forms show up often — that is the real trap
-    var i = Math.random() < 0.28 ? (S.vosotros ? pick([3,4]) : 3) : pick(allowed);
+    // weight the no-change forms — that's where the endings actually bite
+    var i = Math.random() < 0.3 ? (S.vosotros ? pick([3,4]) : 3) : pick(allowed);
     S.q = {v:v, i:i, answer: formOf(v,i)};
     S.answered = false;
 
-    var hotVowel = v.change.charAt(0);
-    var idx = v.inf.lastIndexOf(hotVowel === "u" ? "u" : hotVowel);
+    var hot = v.change.charAt(0);
+    var idx = v.inf.lastIndexOf(hot);
     $("inf").innerHTML = idx >= 0
       ? esc(v.inf.slice(0,idx)) + '<span class="hot">' + esc(v.inf.charAt(idx)) + '</span>' + esc(v.inf.slice(idx+1))
       : esc(v.inf);
-    $("gloss").textContent = v.gloss + "  ·  verbo -" + v.type;
+    $("gloss").textContent = v.gloss;
+    $("fam").textContent = "-" + v.type + " verb";
     var k = $("kind");
     k.textContent = v.change;
-    k.className = "kind" + (v.change==="e → i" ? " i" : v.change.indexOf("e →")===0 ? " e" : "");
+    k.className = "kind" + (v.change==="e → i" ? " i" : v.change==="u → ue" ? " u" : v.change==="e → ie" ? " e" : "");
     $("subj").textContent = PEOPLE[i];
+    $("subjen").textContent = "(" + ENGL[i] + ")";
     $("inf").classList.remove("popin"); void $("inf").offsetWidth; $("inf").classList.add("popin");
 
     $("verdict").hidden = true;
+    $("hintbox").hidden = true;
     $("resp").value = ""; $("resp").disabled = false; $("resp").focus();
-    $("go").textContent = "Enviar";
+    $("go").textContent = "Check";
 
-    paintBoot(i);
-    $("coachbody").hidden = true;
-    $("peek").textContent = "Ver respuesta";
-    $("coachans").textContent = PEOPLE[i].split(" / ")[0] + " " + S.q.answer;
-    $("coachrule").innerHTML = inBoot(i)
-      ? "Dentro de la bota: el radical cambia <b>" + esc(v.change) + "</b>. Terminación -" + v.type + ": <b>-" + esc(endingOf(v,i)) + "</b>."
-      : "Fuera de la bota: el radical se queda <b>" + esc(v.stem) + "-</b>. Terminación -" + v.type + ": <b>-" + esc(endingOf(v,i)) + "</b>.";
-    $("coachq").textContent = "Pregúntale: " + pick(COACH_Q);
+    paintBoot(i); paintEndings(v,i);
   }
-
-  $("peek").addEventListener("click", function(){
-    var b = $("coachbody");
-    b.hidden = !b.hidden;
-    $("peek").textContent = b.hidden ? "Ver respuesta" : "Ocultar";
-  });
 
   function paintBoot(now){
     var order = [0,3,1,4,2,5], html = "";
     for(var k=0;k<order.length;k++){
       var i = order[k];
       html += '<div class="cell' + (inBoot(i)?" in":"") + (i===now?" now":"") + '"><small>' +
-              esc(SHORT[i]) + '</small>' + (inBoot(i) ? "cambia" : "sin cambio") + '</div>';
+              esc(SHORT[i]) + '</small>' + (inBoot(i) ? "stem changes" : "no change") + '</div>';
     }
     $("bootgrid").innerHTML = html;
   }
+  function paintEndings(v,now){
+    $("endlab").textContent = "-" + v.type + " endings";
+    var html = "";
+    for(var i=0;i<6;i++){
+      if(i===4 && !S.vosotros) continue;
+      html += '<div class="' + (i===now?"on":"") + '"><span>' + esc(SHORT[i]) + '</span><b>-' + esc(ENDINGS[v.type][i]) + '</b></div>';
+    }
+    $("endsnap").innerHTML = html;
+  }
+
+  /* ---------------- hint / skip ---------------- */
+  $("hintbtn").addEventListener("click", function(){
+    if(!S.q) return;
+    var v = S.q.v, i = S.q.i, b = $("hintbox");
+    b.hidden = false;
+    b.innerHTML = (inBoot(i)
+        ? "<b>" + esc(SHORT[i]) + "</b> is inside the boot, so the stem changes <b>" + esc(v.change) + "</b>."
+        : "<b>" + esc(SHORT[i]) + "</b> is outside the boot, so the stem stays <b>" + esc(v.stem) + "-</b>.")
+      + " It's an <b>-" + v.type + "</b> verb, so the ending is <b>-" + esc(endOf(v,i)) + "</b>.";
+  });
+  $("skipbtn").addEventListener("click", function(){
+    if(!S.q || S.answered) { nextQ(); return; }
+    S.skipped++; S.streak = 0;
+    S.miss[S.q.v.inf] = (S.miss[S.q.v.inf]||0) + 1;
+    S.answered = true;
+    var vd = $("verdict");
+    vd.hidden = false; vd.className = "verdict no";
+    vd.innerHTML = '<span class="vhead">Skipped — here it is</span>' + buildHTML(S.q.v,S.q.i) + legend() +
+      '<div class="why">' + ruleLine(S.q.v,S.q.i) + '</div>';
+    $("resp").disabled = true;
+    $("go").textContent = "Next →";
+    paintHud();
+  });
 
   /* ---------------- answering ---------------- */
   $("go").addEventListener("click", submit);
@@ -547,102 +581,137 @@
     if(S.answered){ nextQ(); return; }
     var typed = clean($("resp").value);
     if(!typed) return;
-    if(!S.running){ S.running = true; $("pause").textContent = "Pausa"; }
+    if(!S.running){ S.running = true; $("pause").textContent = "Pause"; }
 
     var q = S.q, v = q.v, i = q.i, right = q.answer;
-    var P = S.players[S.turn];
-    P.tries++;
+    S.tries++; S.byType[v.type].t++;
     S.answered = true;
     $("resp").disabled = true;
-    $("go").textContent = "Siguiente →";
+    $("go").textContent = "Next →";
 
     var exact = typed === right;
     var near  = !exact && strip(typed) === strip(right);
-
     var vd = $("verdict");
     vd.hidden = false;
-    var built = buildHTML(v,i);
 
     if(exact || near){
       S.streak++;
-      if(S.streak > P.best) P.best = S.streak;
+      if(S.streak > S.best) S.best = S.streak;
       var gain = exact ? (100 + Math.min(S.streak,10)*20) : 40;
-      P.pts += gain;
-      if(exact) P.right++; else P.near++;
+      S.pts += gain;
+      S.byType[v.type].r++;
+      if(exact){ S.right++; } else { S.accentOnly++; S.err.accent++; }
       vd.className = "verdict " + (exact ? "ok" : "near");
-      vd.innerHTML = '<span class="vhead">' + (exact ? pick(["¡Perfecto!","¡Eso es!","¡Bien hecho!","¡Clavado!"]) : "¡Casi! Te falta el acento") + " +" + gain + '</span>' +
-        built +
-        '<div class="why">' + ruleLine(v,i) + (exact && S.streak>2 ? ' · racha de ' + S.streak : "") + '</div>';
+      vd.innerHTML = '<span class="vhead">' +
+          (exact ? pick(["Perfect!","Nailed it!","That's it!","Clean."]) : "So close — missing accent") +
+          "  +" + gain + '</span>' +
+        buildHTML(v,i) + legend() +
+        '<div class="why">' + ruleLine(v,i) + (exact && S.streak>2 ? " · " + S.streak + " in a row" : "") + '</div>';
       if(exact) confetti();
       paintHud();
-      setTimeout(function(){ if(S.answered && S.phase==="play") nextQ(); }, exact ? 1100 : 2200);
+      setTimeout(function(){ if(S.answered && S.phase==="play") nextQ(); }, exact ? 1150 : 2400);
     } else {
       S.streak = 0;
-      P.miss[v.inf] = (P.miss[v.inf]||0) + 1;
+      S.miss[v.inf] = (S.miss[v.inf]||0) + 1;
+      var d = diagnose(v,i,typed);
+      S.err[d.kind]++;
       vd.className = "verdict no";
-      vd.innerHTML = '<span class="vhead">Casi — mira la construcción</span>' +
-        '<div class="why">Escribiste <b class="mono">' + esc(typed) + '</b>. La forma es:</div>' +
-        built +
-        '<div class="why">' + diagnose(v,i,typed) + '</div>';
+      vd.innerHTML = '<span class="vhead">' + esc(d.head) + '</span>' +
+        '<div class="why">You wrote <b class="mono">' + esc(typed) + '</b>. The form is:</div>' +
+        buildHTML(v,i) + legend() +
+        '<div class="why">' + d.msg + '</div>';
       paintHud();
     }
   }
 
   function buildHTML(v,i){
-    var end = endingOf(v,i);
-    var st  = v.ov[i] ? v.ov[i].slice(0, v.ov[i].length - endLen(v,i)) : stemOf(v,i);
-    var tail = v.ov[i] ? v.ov[i].slice(v.ov[i].length - endLen(v,i)) : end;
-    return '<div class="built"><span class="stem">' + esc(st) + '</span><span class="plus">+</span><span class="end">' + esc(tail) + '</span></div>';
+    return '<div class="built"><span class="stem">' + esc(stemOf(v,i)) + '</span>' +
+           '<span class="plus">+</span><span class="end">' + esc(endOf(v,i)) + '</span></div>';
   }
-  function endLen(v,i){
-    var e = ENDINGS[v.type][i], f = v.ov[i] || "";
-    return f.slice(-e.length) === e ? e.length : 1;
+  function legend(){
+    return '<div class="legend"><span class="s">■ stem</span> &nbsp; <span class="e">■ ending</span></div>';
   }
   function ruleLine(v,i){
-    return inBoot(i)
-      ? "Dentro de la bota → radical <b>" + esc(v.change) + "</b>, terminación -" + v.type + " <b>-" + esc(endingOf(v,i)) + "</b>."
-      : "Fuera de la bota → radical sin cambio, terminación -" + v.type + " <b>-" + esc(endingOf(v,i)) + "</b>.";
+    return (inBoot(i)
+      ? "Inside the boot → stem goes <b>" + esc(v.change) + "</b>"
+      : "Outside the boot → stem stays <b>" + esc(v.stem) + "-</b>")
+      + ", and <b>-" + v.type + "</b> verbs take <b>-" + esc(endOf(v,i)) + "</b> here.";
   }
-  function diagnose(v,i,typed){
-    var right = formOf(v,i), end = endingOf(v,i);
-    var endOK = typed.slice(-end.length) === end;
-    var stemOK = typed.indexOf(strip(stemOf(v,i)).slice(0,3)) === 0 || typed.indexOf(stemOf(v,i)) === 0;
-    var wrongStem = (typed.indexOf(inBoot(i) ? v.stem : v.changed) === 0);
 
-    if(!endOK && wrongStem) return "Dos cosas: el radical y la terminación. " + ruleLine(v,i);
-    if(wrongStem) return inBoot(i)
-      ? "La terminación está bien — el radical no. <b>" + esc(v.inf) + "</b> está dentro de la bota aquí: <b>" + esc(v.change) + "</b>."
-      : "La terminación está bien — el radical no. <b>Nosotros y vosotros nunca cambian</b>: se queda <b>" + esc(v.stem) + "-</b>.";
-    if(!endOK) return "El radical está bien. Revisa la terminación: <b>" + esc(v.inf) + "</b> es un verbo <b>-" + v.type + "</b>, así que " + esc(PEOPLE[i].split(" / ")[0]) + " lleva <b>-" + esc(end) + "</b>.";
-    if(strip(typed) === strip(right)) return "Solo el acento.";
-    return ruleLine(v,i);
+  function diagnose(v,i,typed){
+    var end = endOf(v,i), st = stemOf(v,i);
+    var endOK = typed.length > end.length && strip(typed.slice(-end.length)) === strip(end);
+    var stemOK = typed.indexOf(st) === 0 || strip(typed).indexOf(strip(st)) === 0;
+    var flipped = typed.indexOf(inBoot(i) ? v.stem : v.changed) === 0;
+
+    if(!endOK && !stemOK){
+      return {kind:"both", head:"Both halves are off",
+        msg:"Rebuild it in two steps: stem first, then ending. " + ruleLine(v,i)};
+    }
+    if(endOK && !stemOK){
+      return {kind:"stem", head:"Ending's right — stem isn't",
+        msg: flipped
+          ? (inBoot(i)
+              ? "You used the unchanged stem. <b>" + esc(SHORT[i]) + "</b> is inside the boot, so <b>" + esc(v.inf) + "</b> goes <b>" + esc(v.change) + "</b>."
+              : "You changed a stem that shouldn't change. <b>Nosotros and vosotros never stem-change</b> — it stays <b>" + esc(v.stem) + "-</b>.")
+          : "The stem here is <b>" + esc(st) + "-</b>. " + ruleLine(v,i)};
+    }
+    if(!endOK){
+      return {kind:"ending", head:"Stem's right — check the ending",
+        msg:"<b>" + esc(v.inf) + "</b> is an <b>-" + v.type + "</b> verb, so <b>" + esc(SHORT[i]) + "</b> takes <b>-" + esc(end) + "</b>" +
+            (v.type !== "ar" && (i===3 || i===4)
+              ? " — this is exactly where -er and -ir split: <b>-emos/-éis</b> vs <b>-imos/-ís</b>."
+              : ".")};
+    }
+    return {kind:"accent", head:"Check your accents", msg: ruleLine(v,i)};
   }
 
   /* ---------------- results ---------------- */
   function results(){
-    var a = S.players[0], b = S.players[1];
-    var win = a.pts === b.pts ? -1 : (a.pts > b.pts ? 0 : 1);
-    var html = "";
-    [a,b].forEach(function(p,idx){
-      var acc = p.tries ? Math.round(((p.right + p.near) / p.tries) * 100) : 0;
-      var miss = Object.keys(p.miss).sort(function(x,y){ return p.miss[y]-p.miss[x]; }).slice(0,4);
-      html += '<div class="pcard ' + (idx===0?"a":"b") + '">' +
-        '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">' +
-          '<h3 style="font-size:1.3rem">' + esc(p.name) + '</h3>' +
-          (win===idx ? '<span class="winner">Campeón/a</span>' : '') +
-        '</div>' +
-        '<div class="stat"><span>Puntos</span><span>' + p.pts + '</span></div>' +
-        '<div class="stat"><span>Perfectas</span><span>' + p.right + '</span></div>' +
-        '<div class="stat"><span>Solo faltó el acento</span><span>' + p.near + '</span></div>' +
-        '<div class="stat"><span>Precisión</span><span>' + acc + '%</span></div>' +
-        '<div class="stat"><span>Mejor racha</span><span>' + p.best + '</span></div>' +
-        '<div style="margin-top:10px;font-weight:900;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)">Para repasar</div>' +
-        (miss.length
-          ? '<ul class="misslist">' + miss.map(function(m){ return "<li>" + esc(m) + " (" + p.miss[m] + ")</li>"; }).join("") + '</ul>'
-          : '<p class="misslist" style="list-style:none;padding:0">Nada — ni un fallo.</p>') +
-      '</div>';
+    var scored = S.right + S.accentOnly;
+    var acc = S.tries ? Math.round((scored / S.tries) * 100) : 0;
+    $("stats").innerHTML =
+      '<div class="stat"><span>Score</span><span>' + S.pts + '</span></div>' +
+      '<div class="stat"><span>Perfect answers</span><span>' + S.right + '</span></div>' +
+      '<div class="stat"><span>Right but missing an accent</span><span>' + S.accentOnly + '</span></div>' +
+      '<div class="stat"><span>Answered</span><span>' + S.tries + '</span></div>' +
+      '<div class="stat"><span>Accuracy</span><span>' + acc + '%</span></div>' +
+      '<div class="stat"><span>Best streak</span><span>' + S.best + '</span></div>' +
+      '<div class="stat"><span>Skipped</span><span>' + S.skipped + '</span></div>';
+
+    var bt = "";
+    ["ar","er","ir"].forEach(function(t){
+      var o = S.byType[t], pct = o.t ? Math.round(o.r/o.t*100) : 0;
+      var cls = pct >= 80 ? "" : pct >= 55 ? " mid" : " low";
+      bt += '<div class="bar"><span>-' + t + ' verbs</span>' +
+            '<span class="track"><span class="fill' + cls + '" style="width:' + (o.t?pct:0) + '%"></span></span>' +
+            '<em>' + (o.t ? pct + "%" : "—") + '</em></div>';
     });
-    $("board").innerHTML = html;
+    $("bytype").innerHTML = bt;
+
+    var e = S.err, tot = e.stem + e.ending + e.both + e.accent;
+    $("byerr").innerHTML = tot === 0
+      ? '<p class="misslist" style="list-style:none;padding:0">No mistakes to break down.</p>'
+      : '<div class="stat"><span>Stem change</span><span>' + e.stem + '</span></div>' +
+        '<div class="stat"><span>Wrong ending</span><span>' + e.ending + '</span></div>' +
+        '<div class="stat"><span>Both</span><span>' + e.both + '</span></div>' +
+        '<div class="stat"><span>Accent only</span><span>' + e.accent + '</span></div>';
+
+    var keys = Object.keys(S.miss).sort(function(a,b){ return S.miss[b]-S.miss[a]; }).slice(0,6);
+    $("misslist").innerHTML = keys.length
+      ? keys.map(function(m){
+          var v = VERBS.filter(function(x){ return x.inf===m; })[0];
+          return "<li><b>" + esc(m) + "</b> — " + esc(v.change) + ", -" + v.type + " verb (" + esc(v.gloss) + ") ×" + S.miss[m] + "</li>";
+        }).join("")
+      : "<li>Nothing missed. Go up a difficulty: turn on vosotros.</li>";
+
+    var advice;
+    if(S.tries === 0) advice = "No answers yet — hit Play again and type a few.";
+    else if(e.ending > e.stem && e.ending > 0) advice = "Endings are costing you more than stem changes. Drill the nosotros row: -ar takes -amos, -er takes -emos, -ir takes -imos.";
+    else if(e.stem > 0 && e.stem >= e.ending) advice = "Stem changes are the gap. Picture the boot: yo, tú, él and ellos change — nosotros and vosotros never do.";
+    else if(e.accent > 0) advice = "Your grammar is solid; you're just dropping accents. Watch -áis, -éis and -ís.";
+    else advice = "Clean run. Add vosotros or a longer session to push it.";
+    $("advice").textContent = advice;
   }
 
   /* ---------------- confetti ---------------- */
@@ -661,7 +730,7 @@
     var w = window.innerWidth, h = window.innerHeight;
     for(var i=0;i<70;i++){
       bits.push({
-        x:w*0.4 + Math.random()*w*0.2, y:h*0.42,
+        x:w*0.38 + Math.random()*w*0.24, y:h*0.42,
         vx:(Math.random()-0.5)*11, vy:-6-Math.random()*9,
         s:5+Math.random()*7, c:CC[i%CC.length], r:Math.random()*6, vr:(Math.random()-0.5)*0.4, life:0
       });
