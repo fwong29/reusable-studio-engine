@@ -1,4 +1,17 @@
-<title>Cambio de Raíz</title>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cambio de Raíz — Spanish Stem-Changer Game</title>
+<meta name="description" content="A single-player game for practicing Spanish stem-changing verbs. Type the conjugated form and get the -ar, -er, or -ir ending right.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Cambio de Raíz">
+<meta property="og:description" content="Type Spanish stem-changers against the clock — and get the -ar / -er / -ir ending right.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23170a2e'/%3E%3Ctext x='50' y='72' font-size='64' font-family='Georgia,serif' font-weight='bold' text-anchor='middle' fill='%23FF2E88'%3E%C3%B1%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:ital,wght@0,400;0,700;0,900;1,700&family=DM+Mono:wght@400;500&display=swap">
 <style>
   :root{
@@ -17,7 +30,9 @@
     --shadow: 0 6px 0 #0d0519;
   }
   *{box-sizing:border-box}
-  html,body{margin:0}
+  html,body{margin:0;height:100%}
+  img{max-width:100%}
+  :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
   body{
     background:
       radial-gradient(900px 500px at 12% -8%, rgba(255,46,136,.30), transparent 60%),
@@ -188,6 +203,8 @@
   @keyframes pop{0%{transform:scale(.86) rotate(-3deg)}60%{transform:scale(1.04) rotate(1deg)}100%{transform:scale(1) rotate(0)}}
   .popin{animation:pop .28s ease-out}
 </style>
+</head>
+<body>
 
 <canvas id="fx"></canvas>
 <div class="wrap">
@@ -755,3 +772,5 @@
   paintBoot(0);
 })();
 </script>
+</body>
+</html>
