@@ -8,44 +8,58 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.2/math.min.js"></script>
 </head>
 <body>
   <canvas id="field" aria-hidden="true"></canvas>
-  <main class="machine">
-    <div class="topbar">
-      <div class="nameplate">Weight</div>
-      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="Tap sound (off)">tap sound: off</button>
-    </div>
 
-    <div class="display" id="display">0</div>
+  <main class="app">
+    <section class="calc">
+      <div class="topbar">
+        <div class="nameplate">Weight</div>
+        <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="Tap sound (off)">tap sound: off</button>
+      </div>
 
-    <button class="tally" id="tally">
-      <span class="tally-count" id="tallyCount">0</span>
-      <div class="tally-marks" id="tallyMarks"></div>
-    </button>
+      <div class="display" id="display">0</div>
+      <div class="readout" id="readout">y' = 0</div>
 
-    <button class="opkey" id="opKey" type="button" aria-label="operator — tap to cycle">
-      <span class="opkey-glyph" id="opGlyph">+</span>
-      <div class="opkey-pips" id="opPips"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-    </button>
+      <button class="tally" id="tally">
+        <span class="tally-count" id="tallyCount">0</span>
+        <div class="tally-marks" id="tallyMarks"></div>
+      </button>
 
-    <div class="row">
-      <button class="key key--control" data-type="control" data-value="C">C</button>
-      <button class="key key--control" data-type="control" data-value="⌫">⌫</button>
-      <button class="key key--equals" data-type="control" data-value="=">=</button>
-    </div>
+      <div class="row fns">
+        <button class="key key--x" id="xKey" type="button">x</button>
+        <button class="opkey opkey--inline" id="opKey" type="button" aria-label="operator — tap to cycle">
+          <span class="opkey-glyph" id="opGlyph">+</span>
+          <div class="opkey-pips" id="opPips"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </button>
+        <button class="key key--mode" id="modeKey" type="button">d/dx</button>
+      </div>
 
-    <p class="caption">every number costs as many presses as its own value</p>
+      <div class="row ctrl">
+        <button class="key key--control" data-type="control" data-value="C">C</button>
+        <button class="key key--control" data-type="control" data-value="⌫">⌫</button>
+        <button class="key key--equals" data-type="control" data-value="=">=</button>
+      </div>
 
-    <div class="legend">
-      <div class="legend-row"><span class="legend-tag">number</span> tap to build a value — it costs as many taps as its size (7 = seven taps)</div>
-      <div class="legend-row"><span class="legend-tag">operator</span> tap to cycle <b>+ − × ÷ ^ %</b></div>
-      <div class="legend-row"><span class="legend-tag">= C ⌫</span> solve · clear · undo one tap</div>
-      <details class="legend-kbd">
-        <summary>keyboard shortcuts</summary>
-        <div><b>space</b> = one tap · <b>Shift</b> = cycle operator · <b>= / Enter</b> = solve · <b>Backspace</b> = undo · <b>Esc</b> = clear</div>
-      </details>
-    </div>
+      <p class="caption">every number costs as many presses as its own value</p>
+
+      <div class="legend">
+        <div class="legend-row"><span class="legend-tag">number</span> tap to build a value — even here, a 7 costs seven taps</div>
+        <div class="legend-row"><span class="legend-tag">x &nbsp;op</span> insert the variable · cycle <b>+ − × ÷ ^ %</b></div>
+        <div class="legend-row"><span class="legend-tag">mode</span> switch the graph between <b>d/dx</b> (derivative) and <b>∫</b> (area)</div>
+        <div class="legend-row"><span class="legend-tag">= C ⌫</span> in ∫ mode = sets the limits · clear · undo one tap</div>
+        <details class="legend-kbd">
+          <summary>keyboard shortcuts</summary>
+          <div><b>space</b> = one tap · <b>Shift</b> = cycle operator · <b>x</b> = variable · <b>m</b> = mode · <b>= / Enter</b> · <b>Backspace</b> · <b>Esc</b></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="graphwrap">
+      <canvas id="graph"></canvas>
+    </section>
   </main>
 
   <script type="module" src="field.js"></script>
