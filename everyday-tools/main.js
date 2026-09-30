@@ -500,8 +500,7 @@ resizeGraph();
 
 // A shareable example seed: /?demo shows x^2 with its derivative, so a link
 // can open on a curve rather than a blank grid.
-if (new URLSearchParams(location.search).get('demo')) {
+if (new URLSearchParams(location.search).has('demo')) {
   expr = ['x', '^', '2'];
-  fitView();
 }
 render();
