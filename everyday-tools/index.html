@@ -34,7 +34,22 @@
           <span class="opkey-glyph" id="opGlyph">+</span>
           <div class="opkey-pips" id="opPips"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         </button>
-        <button class="key key--mode" id="modeKey" type="button">d/dx</button>
+        <button class="opkey opkey--inline opkey--fn" id="fnKey" type="button" aria-label="function — tap to cycle">
+          <span class="opkey-glyph" id="fnGlyph">sin</span>
+          <div class="opkey-pips" id="fnPips"><span></span><span></span><span></span><span></span><span></span></div>
+        </button>
+      </div>
+
+      <div class="row fns2">
+        <button class="key key--root" id="rootKey" type="button" aria-label="nth root — tap, then enter the index">ⁿ√</button>
+        <button class="opkey opkey--inline opkey--paren" id="parenKey" type="button" aria-label="parentheses — tap to cycle">
+          <span class="opkey-glyph" id="parenGlyph">(</span>
+          <div class="opkey-pips" id="parenPips"><span></span><span></span></div>
+        </button>
+        <button class="opkey opkey--inline opkey--mode" id="modeKey" type="button" aria-label="mode — tap to cycle derivative / integral">
+          <span class="opkey-glyph" id="modeGlyph">d/dx</span>
+          <div class="opkey-pips" id="modePips"><span></span><span></span></div>
+        </button>
       </div>
 
       <div class="row ctrl">
@@ -48,11 +63,12 @@
       <div class="legend">
         <div class="legend-row"><span class="legend-tag">number</span> tap to build a value — even here, a 7 costs seven taps</div>
         <div class="legend-row"><span class="legend-tag">x &nbsp;op</span> insert the variable · cycle <b>+ − × ÷ ^ %</b></div>
-        <div class="legend-row"><span class="legend-tag">mode</span> switch the graph between <b>d/dx</b> (derivative) and <b>∫</b> (area)</div>
+        <div class="legend-row"><span class="legend-tag">ƒ &nbsp;( )</span> cycle <b>√ ∛ sin cos ln</b> · insert parentheses</div>
+        <div class="legend-row"><span class="legend-tag">mode</span> cycle the graph between <b>d/dx</b> (derivative) and <b>∫</b> (area)</div>
         <div class="legend-row"><span class="legend-tag">= C ⌫</span> in ∫ mode = sets the limits · clear · undo one tap</div>
         <details class="legend-kbd">
           <summary>keyboard shortcuts</summary>
-          <div><b>space</b> = one tap · <b>Shift</b> = cycle operator · <b>x</b> = variable · <b>m</b> = mode · <b>= / Enter</b> · <b>Backspace</b> · <b>Esc</b></div>
+          <div><b>space</b> = one tap · <b>Shift</b> = cycle operator · <b>x</b> = variable · <b>m</b> = mode · <b>( )</b> parentheses · <b>= / Enter</b> · <b>Backspace</b> · <b>Esc</b></div>
         </details>
       </div>
     </section>

@@ -303,15 +303,40 @@ body {
   font-style: italic;
 }
 
-.key--mode {
+.key--root {
+  color: var(--accent-edge);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.opkey--fn,
+.opkey--paren {
+  background: var(--key);
+  color: var(--ink);
+  box-shadow:
+    0 2px 0 var(--key-edge),
+    0 6px 12px rgba(38, 32, 26, 0.16);
+}
+.opkey--fn:active,
+.opkey--paren:active { box-shadow: 0 0 0 var(--key-edge); }
+.opkey--fn .opkey-glyph,
+.opkey--paren .opkey-glyph { font-size: 16px; }
+.opkey--fn .opkey-pips span,
+.opkey--paren .opkey-pips span { background: rgba(38, 32, 26, 0.22); }
+.opkey--fn .opkey-pips span.on,
+.opkey--paren .opkey-pips span.on { background: var(--accent); }
+
+.opkey--mode {
   background: var(--teal);
   color: #f2faf8;
-  font-size: 15px;
   box-shadow:
     0 2px 0 var(--teal-edge),
     0 6px 12px rgba(38, 32, 26, 0.2);
 }
-.key--mode:active { box-shadow: 0 0 0 var(--teal-edge); }
+.opkey--mode:active { box-shadow: 0 0 0 var(--teal-edge); }
+.opkey--mode .opkey-glyph { font-size: 15px; }
+.opkey--mode .opkey-pips span { background: rgba(242, 250, 248, 0.35); }
+.opkey--mode .opkey-pips span.on { background: #f2faf8; }
 
 .key {
   position: relative;

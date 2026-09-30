@@ -12,15 +12,27 @@ const tallyCountEl = document.getElementById('tallyCount');
 const tallyMarksEl = document.getElementById('tallyMarks');
 const opGlyphEl = document.getElementById('opGlyph');
 const opPipsEl = document.getElementById('opPips');
-const modeKey = document.getElementById('modeKey');
+const modeGlyphEl = document.getElementById('modeGlyph');
+const modePipsEl = document.getElementById('modePips');
 
 const OPS = ['+', '−', '×', '÷', '^', '%'];
 const isOp = (x) => OPS.includes(x);
 const MAX_MARKS = 40;
 const GROUP = 5;
 
+// Functions cycle on one key; each stored token is math.js-ready with a
+// prettier display glyph. Roots are handled separately by the root key, which
+// takes any index into a multi-tapped box (nth root).
+const FUNCS = ['sin(', 'cos(', 'tan(', 'log(', 'log10('];
+const FUNC_GLYPH = { 'sin(': 'sin(', 'cos(': 'cos(', 'tan(': 'tan(', 'log(': 'ln(', 'log10(': 'log(' };
+const isFunc = (t) => FUNCS.includes(t);
+const PARENS = ['(', ')'];
+const ROOT = 'nthRoot(';
+
 const TO_MATH = { '−': '-', '×': '*', '÷': '/', '%': ' mod ' };
 const toMath = (tok) => TO_MATH[tok] ?? tok;
+const TO_DISPLAY = { ...FUNC_GLYPH, 'nthRoot(': 'root(' };
+const toDisplay = (tok) => TO_DISPLAY[tok] ?? tok;
 
 let expr = [];            // committed tokens: numbers (strings), operators, 'x'
 let currentTally = 0;     // pending multi-tapped number
@@ -30,6 +42,9 @@ let opCycleIdx = -1;
 let mode = 'deriv';       // 'deriv' | 'integ'
 let bound = 'idle';       // 'idle' | 'lower' | 'upper' | 'done'
 let loA = null, loB = null, integVal = null;
+let funcIdx = 0;          // which function the ƒ key will insert next
+let awaitingRoot = false; // root key pressed; multi-tapping the index into its box
+let rootTarget = null;    // [start,end] operand range the root will wrap
 
 /* ---------- sound (opt-in) ---------- */
 let audio = null, soundOn = false;
@@ -96,13 +111,17 @@ function render(fx = {}) {
   if (bound === 'lower' || bound === 'upper') {
     const n = tallyTouched ? String(currentTally) : '·';
     display.textContent = (bound === 'lower' ? 'lower limit = ' : 'upper limit = ') + n;
+  } else if (awaitingRoot) {
+    display.textContent = 'root index = ' + (tallyTouched ? String(currentTally) : '·');
   } else {
-    const parts = exprWithPending();
+    const parts = exprWithPending().map(toDisplay);
     display.textContent = parts.length ? parts.join(' ') : '0';
   }
 
   if (fx.tap) pulse(tallyCountEl, 'is-tick');
+  updateParenDisplay();
   updateReadout();
+  if (awaitingRoot) readout.textContent = 'ⁿ√ tap the root index (blank = 2), then =';
   drawGraph();
 }
 
@@ -133,6 +152,10 @@ function commitPending() {
   return true;
 }
 
+// True while a number is being multi-tapped into a "box" (integral limit or
+// root index) rather than into the expression.
+function inNumberBox() { return bound === 'lower' || bound === 'upper' || awaitingRoot; }
+
 // Editing the expression after an integral was computed drops the stale
 // shading/result and returns to normal building.
 function leaveDone() {
@@ -140,7 +163,7 @@ function leaveDone() {
 }
 
 function pressTally() {
-  if (bound === 'lower' || bound === 'upper') {
+  if (inNumberBox()) {
     currentTally += 1; tallyTouched = true; playTick();
     render({ tap: true });
     return;
@@ -151,7 +174,7 @@ function pressTally() {
 }
 
 function pressX() {
-  if (bound === 'lower' || bound === 'upper') return;
+  if (inNumberBox()) return;
   leaveDone();
   commitPending();
   expr.push('x');
@@ -163,7 +186,7 @@ function updateOpDisplay() {
   Array.from(opPipsEl.children).forEach((p, i) => p.classList.toggle('on', i === opCycleIdx));
 }
 function pressOperator(op) {
-  if (bound === 'lower' || bound === 'upper') return;
+  if (inNumberBox()) return;
   leaveDone();
   if (expr.length === 0 && !tallyTouched) return;
   commitPending();
@@ -172,7 +195,7 @@ function pressOperator(op) {
   render();
 }
 function cycleOperator() {
-  if (bound === 'lower' || bound === 'upper') return;
+  if (inNumberBox()) return;
   leaveDone();
   if (expr.length === 0 && !tallyTouched) return;
   const lastIsOp = isOp(expr[expr.length - 1]);
@@ -181,15 +204,106 @@ function cycleOperator() {
   updateOpDisplay();
 }
 
+/* ---------- function key (√ ∛ sin cos ln) ---------- */
+const fnGlyphEl = document.getElementById('fnGlyph');
+const fnPipsEl = document.getElementById('fnPips');
+function updateFnDisplay() {
+  fnGlyphEl.textContent = FUNC_GLYPH[FUNCS[funcIdx]].replace('(', '');
+  Array.from(fnPipsEl.children).forEach((p, i) => p.classList.toggle('on', i === funcIdx));
+}
+function cycleFunction() {
+  if (inNumberBox()) return;
+  leaveDone();
+  const last = expr[expr.length - 1];
+  if (isFunc(last)) {
+    funcIdx = (funcIdx + 1) % FUNCS.length;
+    expr[expr.length - 1] = FUNCS[funcIdx];
+  } else {
+    commitPending();
+    funcIdx = 0;
+    expr.push(FUNCS[0]);
+  }
+  updateFnDisplay();
+  render();
+}
+
+/* ---------- parentheses key (context-smart; pip shows which it will insert) ---------- */
+const parenGlyphEl = document.getElementById('parenGlyph');
+const parenPipsEl = document.getElementById('parenPips');
+function nextParen() {
+  let open = 0;
+  for (const t of expr) { if (t.endsWith('(')) open++; else if (t === ')') open--; }
+  const last = expr[expr.length - 1];
+  const operandLast = tallyTouched || (last && (last === ')' || last === 'x' || (!isOp(last) && !last.endsWith('('))));
+  return (open > 0 && operandLast) ? ')' : '(';
+}
+function updateParenDisplay() {
+  const p = nextParen();
+  parenGlyphEl.textContent = p;
+  const idx = p === '(' ? 0 : 1;
+  Array.from(parenPipsEl.children).forEach((el, i) => el.classList.toggle('on', i === idx));
+}
+function pressParen() {
+  if (inNumberBox()) return;
+  leaveDone();
+  const p = nextParen();
+  commitPending();
+  expr.push(p);
+  render();
+}
+
+/* ---------- root key (any index, into a multi-tapped box) ---------- */
+function lastOperandRange() {
+  const n = expr.length; if (n === 0) return null;
+  const last = expr[n - 1];
+  if (last === ')') {
+    let depth = 0;
+    for (let i = n - 1; i >= 0; i--) {
+      const t = expr[i];
+      if (t === ')') depth++;
+      else if (t.endsWith('(')) { depth--; if (depth === 0) return [i, n - 1]; }
+    }
+    return null;
+  }
+  if (!isOp(last) && !last.endsWith('(')) return [n - 1, n - 1];
+  return null;
+}
+function pressRoot() {
+  if (inNumberBox()) return;
+  leaveDone();
+  commitPending();
+  const r = lastOperandRange();
+  if (!r) return;                 // nothing to take the root of yet
+  rootTarget = r;
+  awaitingRoot = true;
+  currentTally = 0; tallyTouched = false;
+  render();
+}
+function applyRoot(n) {
+  const [s, e] = rootTarget;
+  const operand = expr.slice(s, e + 1);
+  expr = [...expr.slice(0, s), ROOT, ...operand, ',', String(n), ')', ...expr.slice(e + 1)];
+  rootTarget = null;
+}
+
 function setMode(m) {
   mode = m;
-  modeKey.textContent = mode === 'deriv' ? 'd/dx' : '∫';
+  modeGlyphEl.textContent = mode === 'deriv' ? 'd/dx' : '∫';
+  const active = mode === 'deriv' ? 0 : 1;
+  Array.from(modePipsEl.children).forEach((p, i) => p.classList.toggle('on', i === active));
   bound = 'idle'; loA = loB = integVal = null;
   render();
 }
 function cycleMode() { setMode(mode === 'deriv' ? 'integ' : 'deriv'); }
 
 function pressEquals() {
+  if (awaitingRoot) {
+    const n = tallyTouched ? currentTally : 2;   // blank index defaults to a square root
+    applyRoot(n);
+    awaitingRoot = false; currentTally = 0; tallyTouched = false;
+    render();
+    return;
+  }
   if (mode === 'integ') {
     // guided, multi-tapped limits
     if (bound === 'idle' || bound === 'done') {
@@ -214,11 +328,12 @@ function pressEquals() {
 function pressClear() {
   expr = []; currentTally = 0; tallyTouched = false; opCycleIdx = -1;
   bound = 'idle'; loA = loB = integVal = null;
+  awaitingRoot = false; rootTarget = null;
   updateOpDisplay();
   render();
 }
 function pressBackspace() {
-  if (bound === 'lower' || bound === 'upper') {
+  if (inNumberBox()) {
     if (currentTally > 0) { currentTally -= 1; tallyTouched = currentTally > 0; }
     render(); return;
   }
@@ -341,7 +456,10 @@ canvas.addEventListener('wheel', (e) => { e.preventDefault(); scale = Math.max(4
 tallyButton.addEventListener('click', pressTally);
 document.getElementById('xKey').addEventListener('click', pressX);
 document.getElementById('opKey').addEventListener('click', cycleOperator);
-modeKey.addEventListener('click', cycleMode);
+document.getElementById('fnKey').addEventListener('click', cycleFunction);
+document.getElementById('parenKey').addEventListener('click', pressParen);
+document.getElementById('rootKey').addEventListener('click', pressRoot);
+document.getElementById('modeKey').addEventListener('click', cycleMode);
 document.querySelectorAll('[data-type="control"]').forEach((key) => {
   key.addEventListener('click', () => {
     const v = key.dataset.value;
@@ -356,6 +474,9 @@ const KEY_ACTIONS = {
   'Shift': cycleOperator,
   'x': pressX, 'X': pressX,
   'm': cycleMode, 'M': cycleMode,
+  'f': cycleFunction, 'F': cycleFunction,
+  'r': pressRoot, 'R': pressRoot,
+  '(': pressParen, ')': pressParen,
   '+': () => pressOperator('+'), '-': () => pressOperator('−'),
   '*': () => pressOperator('×'), '/': () => pressOperator('÷'),
   '^': () => pressOperator('^'), '%': () => pressOperator('%'),
@@ -372,6 +493,8 @@ window.addEventListener('keydown', (e) => {
 
 window.addEventListener('resize', resizeGraph);
 updateOpDisplay();
+updateFnDisplay();
+updateParenDisplay();
 setMode('deriv');
 resizeGraph();
 
