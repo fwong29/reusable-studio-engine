@@ -110,12 +110,24 @@ function render(fx = {}) {
 }
 function updateReadout() {
   if (awaitingRoot) { readout.textContent = 'ⁿ√ tap the root index (blank = 2), then ='; return; }
+  if (showInteg) {
+    const e = compileExpr(exprWithPending());
+    if (e) {
+      const [a, b] = effBounds();
+      const lo = Math.min(a, b), hi = Math.max(a, b);
+      let v = simpson(e.compiled, lo, hi, 1000); if (b < a) v = -v;
+      readout.textContent = '∫ from ' + a + ' to ' + b + ' = ' + (isNaN(v) ? 'undefined' : (+v.toFixed(4)));
+    } else readout.textContent = '∫ — type a function of x, then set the limits';
+    return;
+  }
   if (justEvaluated) { readout.textContent = '= ' + expr[0]; return; }
   if (showDeriv) {
     const e = compileExpr(exprWithPending());
     if (e && hasVar(exprWithPending())) {
       try { readout.textContent = "y' = " + math.derivative(e.node, 'x').toString(); return; } catch (_) {}
     }
+    readout.textContent = "d/dx — type a function of x";
+    return;
   }
   readout.textContent = 'every number costs as many taps as its value';
 }
@@ -249,11 +261,19 @@ const chipA = document.getElementById('chipA');
 const chipB = document.getElementById('chipB');
 const areaVal = document.getElementById('areaVal');
 
-derivToggle.addEventListener('click', () => { showDeriv = !showDeriv; derivToggle.setAttribute('aria-pressed', String(showDeriv)); render(); });
+// d/dx and ∫ are mutually exclusive — only one analysis at a time.
+derivToggle.addEventListener('click', () => {
+  showDeriv = !showDeriv;
+  if (showDeriv) { showInteg = false; integToggle.setAttribute('aria-pressed', 'false'); boundsEl.hidden = true; activeBound = null; }
+  derivToggle.setAttribute('aria-pressed', String(showDeriv));
+  render();
+});
 integToggle.addEventListener('click', () => {
-  showInteg = !showInteg; integToggle.setAttribute('aria-pressed', String(showInteg));
+  showInteg = !showInteg;
+  if (showInteg) { showDeriv = false; derivToggle.setAttribute('aria-pressed', 'false'); }
+  integToggle.setAttribute('aria-pressed', String(showInteg));
   boundsEl.hidden = !showInteg;
-  if (!showInteg) { activeBound = null; }
+  if (!showInteg) activeBound = null;
   render();
 });
 chipA.addEventListener('click', () => clickChip('a'));
@@ -265,14 +285,7 @@ function updateBoundsUI() {
   chipB.textContent = String(b);
   chipA.classList.toggle('active', activeBound === 'a');
   chipB.classList.toggle('active', activeBound === 'b');
-  if (showInteg) {
-    const e = compileExpr(expr.filter(t => t !== undefined));
-    if (e) {
-      const lo = Math.min(a, b), hi = Math.max(a, b);
-      let v = simpson(e.compiled, lo, hi, 1000); if (b < a) v = -v;
-      areaVal.textContent = isNaN(v) ? '= undefined' : '= ' + (+v.toFixed(4));
-    } else areaVal.textContent = '';
-  }
+  areaVal.textContent = '';   // the result now lives in the readout box on the left
 }
 function simpson(fn, a, b, n) {
   if (b === a) return 0; if (n % 2) n++;
