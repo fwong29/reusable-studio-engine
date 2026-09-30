@@ -45,6 +45,7 @@ let loA = null, loB = null, integVal = null;
 let funcIdx = 0;          // which function the ƒ key will insert next
 let awaitingRoot = false; // root key pressed; multi-tapping the index into its box
 let rootTarget = null;    // [start,end] operand range the root will wrap
+let justEvaluated = false;// last = produced a plain number (no variable)
 
 /* ---------- sound (opt-in) ---------- */
 let audio = null, soundOn = false;
@@ -122,6 +123,7 @@ function render(fx = {}) {
   updateParenDisplay();
   updateReadout();
   if (awaitingRoot) readout.textContent = 'ⁿ√ tap the root index (blank = 2), then =';
+  else if (justEvaluated) readout.textContent = '= ' + expr[0];
   drawGraph();
 }
 
@@ -168,6 +170,7 @@ function pressTally() {
     render({ tap: true });
     return;
   }
+  if (justEvaluated) { expr = []; justEvaluated = false; }
   leaveDone();
   currentTally += 1; tallyTouched = true; playTick();
   render({ tap: true });
@@ -176,6 +179,7 @@ function pressTally() {
 function pressX() {
   if (inNumberBox()) return;
   leaveDone();
+  justEvaluated = false;
   commitPending();
   expr.push('x');
   render();
@@ -188,6 +192,7 @@ function updateOpDisplay() {
 function pressOperator(op) {
   if (inNumberBox()) return;
   leaveDone();
+  justEvaluated = false;
   if (expr.length === 0 && !tallyTouched) return;
   commitPending();
   if (isOp(expr[expr.length - 1])) expr[expr.length - 1] = op;
@@ -197,6 +202,7 @@ function pressOperator(op) {
 function cycleOperator() {
   if (inNumberBox()) return;
   leaveDone();
+  justEvaluated = false;
   if (expr.length === 0 && !tallyTouched) return;
   const lastIsOp = isOp(expr[expr.length - 1]);
   opCycleIdx = lastIsOp ? (opCycleIdx + 1) % OPS.length : 0;
@@ -214,6 +220,7 @@ function updateFnDisplay() {
 function cycleFunction() {
   if (inNumberBox()) return;
   leaveDone();
+  justEvaluated = false;
   const last = expr[expr.length - 1];
   if (isFunc(last)) {
     funcIdx = (funcIdx + 1) % FUNCS.length;
@@ -246,6 +253,7 @@ function updateParenDisplay() {
 function pressParen() {
   if (inNumberBox()) return;
   leaveDone();
+  justEvaluated = false;
   const p = nextParen();
   commitPending();
   expr.push(p);
@@ -271,6 +279,7 @@ function lastOperandRange() {
 function pressRoot() {
   if (inNumberBox()) return;
   leaveDone();
+  justEvaluated = false;
   commitPending();
   const r = lastOperandRange();
   if (!r) return;                 // nothing to take the root of yet
@@ -304,6 +313,23 @@ function pressEquals() {
     render();
     return;
   }
+  // Plain arithmetic (no variable) behaves like a calculator: show the number.
+  if (mode !== 'integ') {
+    commitPending();
+    if (expr.length && !expr.includes('x')) {
+      const e = compileExpr(expr);
+      if (e) {
+        let v; try { v = e.compiled.evaluate({}); } catch (_) { v = NaN; }
+        if (typeof v === 'number' && isFinite(v)) {
+          expr = [String(Math.round(v * 1e10) / 1e10)];
+          justEvaluated = true;
+          render();
+          return;
+        }
+      }
+    }
+  }
+
   if (mode === 'integ') {
     // guided, multi-tapped limits
     if (bound === 'idle' || bound === 'done') {
