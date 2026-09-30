@@ -140,6 +140,27 @@ function pressOperator(op) {
   if (isOp(expr[expr.length - 1])) expr[expr.length - 1] = op; else expr.push(op);
   render();
 }
+
+// One key cycles the four basic operators + − × ÷ (^ and % have their own keys).
+const OPS4 = ['+', '−', '×', '÷'];
+const opGlyphEl = document.getElementById('opGlyph');
+const opPipsEl = document.getElementById('opPips');
+let opIdx = -1;
+function updateOpDisplay() {
+  opGlyphEl.textContent = opIdx < 0 ? '+' : OPS4[opIdx];
+  Array.from(opPipsEl.children).forEach((p, i) => p.classList.toggle('on', i === opIdx));
+}
+function cycleOperator() {
+  if (inNumberBox()) return;
+  justEvaluated = false;
+  if (expr.length === 0 && !tallyTouched) return;
+  const lastIsOp = isOp(expr[expr.length - 1]);
+  opIdx = lastIsOp ? (opIdx + 1) % OPS4.length : 0;
+  commitPending();
+  if (isOp(expr[expr.length - 1])) expr[expr.length - 1] = OPS4[opIdx]; else expr.push(OPS4[opIdx]);
+  updateOpDisplay();
+  render();
+}
 function pressX() {
   if (inNumberBox()) return;
   justEvaluated = false; commitPending(); expr.push('x'); render();
@@ -208,7 +229,8 @@ function pressEquals() {
 }
 function pressClear() {
   expr = []; currentTally = 0; tallyTouched = false; justEvaluated = false;
-  awaitingRoot = false; rootTarget = null; activeBound = null;
+  awaitingRoot = false; rootTarget = null; activeBound = null; opIdx = -1;
+  updateOpDisplay();
   render();
 }
 function pressBackspace() {
@@ -355,6 +377,7 @@ document.getElementById('zoomOut').addEventListener('click', () => { scale = Mat
 tallyButton.addEventListener('click', pressTally);
 document.getElementById('xKey').addEventListener('click', pressX);
 document.getElementById('rootKey').addEventListener('click', pressRoot);
+document.getElementById('opKey').addEventListener('click', cycleOperator);
 document.querySelectorAll('[data-op]').forEach((b) => b.addEventListener('click', () => pressOperator(b.dataset.op)));
 document.querySelectorAll('[data-fn]').forEach((b) => b.addEventListener('click', () => insertFunc(b.dataset.fn)));
 document.querySelectorAll('[data-paren]').forEach((b) => b.addEventListener('click', () => pressParen(b.dataset.paren)));
@@ -364,7 +387,7 @@ document.querySelectorAll('[data-value]').forEach((b) => b.addEventListener('cli
 }));
 
 const KEY_ACTIONS = {
-  ' ': pressTally, 'x': pressX, 'X': pressX, 'r': pressRoot, 'R': pressRoot,
+  ' ': pressTally, 'Shift': cycleOperator, 'x': pressX, 'X': pressX, 'r': pressRoot, 'R': pressRoot,
   '(': () => pressParen('('), ')': () => pressParen(')'),
   '+': () => pressOperator('+'), '-': () => pressOperator('−'),
   '*': () => pressOperator('×'), '/': () => pressOperator('÷'),
@@ -378,6 +401,7 @@ window.addEventListener('keydown', (e) => {
 });
 
 window.addEventListener('resize', resizeGraph);
+updateOpDisplay();
 resizeGraph();
 if (new URLSearchParams(location.search).has('demo')) { expr = ['x', '^', '2']; showDeriv = true; derivToggle.setAttribute('aria-pressed', 'true'); }
 render();

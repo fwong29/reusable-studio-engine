@@ -29,25 +29,25 @@
       </button>
 
       <div class="row r5">
-        <button class="key key--op" data-op="+">+</button>
-        <button class="key key--op" data-op="−">−</button>
-        <button class="key key--op" data-op="×">×</button>
-        <button class="key key--op" data-op="÷">÷</button>
+        <button class="opkey opkey--inline" id="opKey" type="button" aria-label="operator — tap to cycle + − × ÷">
+          <span class="opkey-glyph" id="opGlyph">+</span>
+          <div class="opkey-pips" id="opPips"><span></span><span></span><span></span><span></span></div>
+        </button>
         <button class="key key--op" data-op="^">^</button>
+        <button class="key key--op" data-op="%">%</button>
+        <button class="key" data-paren="(">(</button>
+        <button class="key" data-paren=")">)</button>
       </div>
 
       <div class="row r5">
         <button class="key key--var" id="xKey" type="button">x</button>
-        <button class="key" data-paren="(">(</button>
-        <button class="key" data-paren=")">)</button>
         <button class="key key--root" id="rootKey" type="button" title="nth root — then tap the index">ⁿ√</button>
-        <button class="key key--op" data-op="%">%</button>
-      </div>
-
-      <div class="row r5">
         <button class="key key--fn" data-fn="sin(">sin</button>
         <button class="key key--fn" data-fn="cos(">cos</button>
         <button class="key key--fn" data-fn="tan(">tan</button>
+      </div>
+
+      <div class="row r2">
         <button class="key key--fn" data-fn="log(">ln</button>
         <button class="key key--fn" data-fn="log10(">log</button>
       </div>

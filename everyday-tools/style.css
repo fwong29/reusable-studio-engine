@@ -352,6 +352,13 @@ body {
   gap: 8px;
 }
 .row.r5 .key { font-size: 16px; height: 48px; }
+.row.r5 .opkey--inline { height: 48px; }
+
+.row.r2 {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.row.r2 .key { font-size: 13px; height: 48px; }
 
 .row.ctrl {
   grid-template-columns: 1fr 1fr 2fr;
