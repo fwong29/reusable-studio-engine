@@ -9,9 +9,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.2/math.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/all.min.js"></script>
 </head>
 <body>
   <canvas id="field" aria-hidden="true"></canvas>
+
+  <header class="pagehead">
+    <div class="pagetitle">Weight</div>
+    <p class="pageinstr">
+      The <b>number key</b> builds a value by tapping — a 7 costs seven taps, everywhere.
+      Type an expression in <b>x</b> to graph it. Turn on <b>d/dx</b> to see the derivative and the indefinite integral,
+      or <b>∫</b> to shade a definite area — click a bound box, then multi-tap the number.
+      Keyboard: space = tap, Shift = cycle + − × ÷, <b>x</b>, <b>( )</b>, <b>r</b> = root, <b>= / Enter</b>, Backspace, Esc.
+    </p>
+  </header>
 
   <main class="app">
     <section class="calc">
@@ -58,15 +69,6 @@
         <button class="key key--equals" data-value="=">=</button>
       </div>
 
-      <details class="legend-kbd">
-        <summary>how it works</summary>
-        <div>
-          The <b>number key</b> builds a value by tapping — a 7 costs seven taps, everywhere.
-          Type an expression in <b>x</b> to graph it. Turn on <b>d/dx</b> to see the derivative,
-          or <b>∫</b> to shade an area — click a bound box, then multi-tap the number.
-          Keyboard: space = tap, x, ( ), r = root, = / Enter, Backspace, Esc.
-        </div>
-      </details>
     </section>
 
     <section class="graphwrap">

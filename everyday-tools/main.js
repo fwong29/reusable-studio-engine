@@ -122,9 +122,14 @@ function updateReadout() {
   }
   if (justEvaluated) { readout.textContent = '= ' + expr[0]; return; }
   if (showDeriv) {
-    const e = compileExpr(exprWithPending());
-    if (e && hasVar(exprWithPending())) {
-      try { readout.textContent = "y' = " + math.derivative(e.node, 'x').toString(); return; } catch (_) {}
+    const tokens = exprWithPending();
+    const e = compileExpr(tokens);
+    if (e && hasVar(tokens)) {
+      let dv = '', iv = '';
+      try { dv = "y' = " + math.derivative(e.node, 'x').toString(); } catch (_) { dv = "y' = —"; }
+      try { iv = "∫ y dx = " + nerdamer('integrate(' + exprString(tokens) + ', x)').toString() + " + C"; } catch (_) { iv = "∫ y dx = (no closed form)"; }
+      readout.textContent = dv + '\n' + iv;
+      return;
     }
     readout.textContent = "d/dx — type a function of x";
     return;

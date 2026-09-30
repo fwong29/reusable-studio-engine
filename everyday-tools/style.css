@@ -34,10 +34,36 @@ body {
   color: var(--ink);
   font-family: 'Inter', system-ui, sans-serif;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
+  padding: 32px 20px 40px;
 }
+
+.pagehead {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 18px;
+}
+.pagetitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+.pageinstr {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  box-shadow: 0 8px 20px -14px rgba(38, 32, 26, 0.28);
+}
+.pageinstr b { color: var(--ink); }
 
 #field {
   position: fixed;
@@ -158,13 +184,15 @@ body {
 .readout {
   font-family: 'Space Mono', monospace;
   font-size: 12px;
+  line-height: 1.5;
   color: var(--accent-edge);
   background: var(--accent-soft);
-  padding: 8px 12px;
+  padding: 9px 12px;
   border-radius: 10px;
   margin-bottom: 14px;
   overflow-x: auto;
-  white-space: nowrap;
+  white-space: pre-line;
+  min-height: 34px;
 }
 
 .topbar {
