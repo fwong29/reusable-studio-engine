@@ -5,7 +5,7 @@ const tallyCountEl = document.getElementById('tallyCount');
 const tallyMarksEl = document.getElementById('tallyMarks');
 const keys = Array.from(document.querySelectorAll('[data-type]'));
 
-const OPS = ['+', '−', '×', '÷'];
+const OPS = ['+', '−', '×', '÷', '^', '%'];
 const isOp = (x) => OPS.includes(x);
 const MAX_MARKS = 40;
 
@@ -123,6 +123,8 @@ function render(fx = {}) {
   if (fx.clear) pulse(machine, 'is-clearing');
 }
 
+// Precedence: ^ (right-associative, highest) → × ÷ % → + −. Each pass
+// collapses one precedence level over parallel nums/ops arrays.
 function evaluate(list) {
   const nums = [parseFloat(list[0])];
   const ops = [];
@@ -131,21 +133,31 @@ function evaluate(list) {
     nums.push(parseFloat(list[i + 1]));
   }
 
-  const stackNums = [nums[0]];
-  const stackOps = [];
-  for (let i = 0; i < ops.length; i++) {
-    if (ops[i] === '×' || ops[i] === '÷') {
-      const prev = stackNums.pop();
-      stackNums.push(ops[i] === '×' ? prev * nums[i + 1] : prev / nums[i + 1]);
-    } else {
-      stackOps.push(ops[i]);
-      stackNums.push(nums[i + 1]);
+  // ^ right-to-left
+  for (let i = ops.length - 1; i >= 0; i--) {
+    if (ops[i] === '^') {
+      nums[i] = Math.pow(nums[i], nums[i + 1]);
+      nums.splice(i + 1, 1);
+      ops.splice(i, 1);
     }
   }
 
-  let result = stackNums[0];
-  for (let i = 0; i < stackOps.length; i++) {
-    result = stackOps[i] === '+' ? result + stackNums[i + 1] : result - stackNums[i + 1];
+  // × ÷ % left-to-right
+  for (let i = 0; i < ops.length; ) {
+    if (ops[i] === '×' || ops[i] === '÷' || ops[i] === '%') {
+      const a = nums[i], b = nums[i + 1];
+      nums[i] = ops[i] === '×' ? a * b : ops[i] === '÷' ? a / b : a % b;
+      nums.splice(i + 1, 1);
+      ops.splice(i, 1);
+    } else {
+      i++;
+    }
+  }
+
+  // + − left-to-right
+  let result = nums[0];
+  for (let i = 0; i < ops.length; i++) {
+    result = ops[i] === '+' ? result + nums[i + 1] : result - nums[i + 1];
   }
   return result;
 }
@@ -280,6 +292,8 @@ const KEY_ACTIONS = {
   '-': () => pressOperator('−'),
   '*': () => pressOperator('×'),
   '/': () => pressOperator('÷'),
+  '^': () => pressOperator('^'),
+  '%': () => pressOperator('%'),
   'Enter': pressEquals,
   '=': pressEquals,
   'Backspace': pressBackspace,
