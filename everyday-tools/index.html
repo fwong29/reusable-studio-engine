@@ -21,59 +21,70 @@
       </div>
 
       <div class="display" id="display">0</div>
-      <div class="readout" id="readout">y' = 0</div>
+      <div class="readout" id="readout">every number costs as many taps as its value</div>
 
       <button class="tally" id="tally">
         <span class="tally-count" id="tallyCount">0</span>
         <div class="tally-marks" id="tallyMarks"></div>
       </button>
 
-      <div class="row fns">
-        <button class="key key--x" id="xKey" type="button">x</button>
-        <button class="opkey opkey--inline" id="opKey" type="button" aria-label="operator — tap to cycle">
-          <span class="opkey-glyph" id="opGlyph">+</span>
-          <div class="opkey-pips" id="opPips"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-        </button>
-        <button class="opkey opkey--inline opkey--fn" id="fnKey" type="button" aria-label="function — tap to cycle">
-          <span class="opkey-glyph" id="fnGlyph">sin</span>
-          <div class="opkey-pips" id="fnPips"><span></span><span></span><span></span><span></span><span></span></div>
-        </button>
+      <div class="row r5">
+        <button class="key key--op" data-op="+">+</button>
+        <button class="key key--op" data-op="−">−</button>
+        <button class="key key--op" data-op="×">×</button>
+        <button class="key key--op" data-op="÷">÷</button>
+        <button class="key key--op" data-op="^">^</button>
       </div>
 
-      <div class="row fns2">
-        <button class="key key--root" id="rootKey" type="button" aria-label="nth root — tap, then enter the index">ⁿ√</button>
-        <button class="opkey opkey--inline opkey--paren" id="parenKey" type="button" aria-label="parentheses — tap to cycle">
-          <span class="opkey-glyph" id="parenGlyph">(</span>
-          <div class="opkey-pips" id="parenPips"><span></span><span></span></div>
-        </button>
-        <button class="opkey opkey--inline opkey--mode" id="modeKey" type="button" aria-label="mode — tap to cycle derivative / integral">
-          <span class="opkey-glyph" id="modeGlyph">d/dx</span>
-          <div class="opkey-pips" id="modePips"><span></span><span></span></div>
-        </button>
+      <div class="row r5">
+        <button class="key key--var" id="xKey" type="button">x</button>
+        <button class="key" data-paren="(">(</button>
+        <button class="key" data-paren=")">)</button>
+        <button class="key key--root" id="rootKey" type="button" title="nth root — then tap the index">ⁿ√</button>
+        <button class="key key--op" data-op="%">%</button>
+      </div>
+
+      <div class="row r5">
+        <button class="key key--fn" data-fn="sin(">sin</button>
+        <button class="key key--fn" data-fn="cos(">cos</button>
+        <button class="key key--fn" data-fn="tan(">tan</button>
+        <button class="key key--fn" data-fn="log(">ln</button>
+        <button class="key key--fn" data-fn="log10(">log</button>
       </div>
 
       <div class="row ctrl">
-        <button class="key key--control" data-type="control" data-value="C">C</button>
-        <button class="key key--control" data-type="control" data-value="⌫">⌫</button>
-        <button class="key key--equals" data-type="control" data-value="=">=</button>
+        <button class="key key--control" data-value="C">C</button>
+        <button class="key key--control" data-value="⌫">⌫</button>
+        <button class="key key--equals" data-value="=">=</button>
       </div>
 
-      <p class="caption">every number costs as many presses as its own value</p>
-
-      <div class="legend">
-        <div class="legend-row"><span class="legend-tag">number</span> tap to build a value — even here, a 7 costs seven taps</div>
-        <div class="legend-row"><span class="legend-tag">x &nbsp;op</span> insert the variable · cycle <b>+ − × ÷ ^ %</b></div>
-        <div class="legend-row"><span class="legend-tag">ƒ &nbsp;( )</span> cycle <b>√ ∛ sin cos ln</b> · insert parentheses</div>
-        <div class="legend-row"><span class="legend-tag">mode</span> cycle the graph between <b>d/dx</b> (derivative) and <b>∫</b> (area)</div>
-        <div class="legend-row"><span class="legend-tag">= C ⌫</span> in ∫ mode = sets the limits · clear · undo one tap</div>
-        <details class="legend-kbd">
-          <summary>keyboard shortcuts</summary>
-          <div><b>space</b> = one tap · <b>Shift</b> = cycle operator · <b>x</b> = variable · <b>m</b> = mode · <b>( )</b> parentheses · <b>= / Enter</b> · <b>Backspace</b> · <b>Esc</b></div>
-        </details>
-      </div>
+      <details class="legend-kbd">
+        <summary>how it works</summary>
+        <div>
+          The <b>number key</b> builds a value by tapping — a 7 costs seven taps, everywhere.
+          Type an expression in <b>x</b> to graph it. Turn on <b>d/dx</b> to see the derivative,
+          or <b>∫</b> to shade an area — click a bound box, then multi-tap the number.
+          Keyboard: space = tap, x, ( ), r = root, = / Enter, Backspace, Esc.
+        </div>
+      </details>
     </section>
 
     <section class="graphwrap">
+      <div class="gtools">
+        <button class="gtoggle" id="derivToggle" type="button" aria-pressed="false">d/dx</button>
+        <button class="gtoggle" id="integToggle" type="button" aria-pressed="false">∫ area</button>
+        <div class="bounds" id="bounds" hidden>
+          <span class="blabel">from</span>
+          <button class="bchip" id="chipA" type="button">0</button>
+          <span class="blabel">to</span>
+          <button class="bchip" id="chipB" type="button">2</button>
+          <span class="bval" id="areaVal"></span>
+        </div>
+        <div class="zoom">
+          <button class="zbtn" id="zoomOut" type="button" aria-label="zoom out">−</button>
+          <button class="zbtn" id="zoomIn" type="button" aria-label="zoom in">+</button>
+        </div>
+      </div>
       <canvas id="graph"></canvas>
     </section>
   </main>
