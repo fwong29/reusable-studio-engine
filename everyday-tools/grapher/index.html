@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grapher — Weight lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.2/math.min.js"></script>
+</head>
+<body>
+  <header class="bar">
+    <div class="brand">Grapher <span>· Weight lab</span></div>
+    <a class="back" href="../">← back to Weight</a>
+  </header>
+
+  <main class="wrap">
+    <div class="panel">
+      <label class="field">
+        <span class="eq">y =</span>
+        <input id="expr" type="text" value="x^2" autocomplete="off" spellcheck="false" />
+      </label>
+      <div id="msg" class="msg" hidden></div>
+
+      <div class="controls">
+        <label class="check">
+          <input type="checkbox" id="showDeriv" /> show derivative <b id="derivExpr">y'</b>
+        </label>
+
+        <div class="integral">
+          <span class="lbl">∫ from</span>
+          <input id="a" type="number" value="0" step="any" />
+          <span class="lbl">to</span>
+          <input id="b" type="number" value="2" step="any" />
+          <button id="area" type="button">area</button>
+          <span id="areaOut" class="out"></span>
+        </div>
+      </div>
+
+      <p class="hint">drag to pan · scroll to zoom · derivative is exact (symbolic); area is a numeric definite integral</p>
+    </div>
+
+    <canvas id="graph"></canvas>
+  </main>
+
+  <script type="module" src="grapher.js"></script>
+</body>
+</html>
