@@ -1,6 +1,6 @@
-# Sensor Layer prototype
+# Held
 
-A piece that watches the person in front of it. One ring, one breath, grain and a
+*Sensor Layer prototype.* A piece that watches the person in front of it. One ring, one breath, grain and a
 hum; no gauge, no numbers, no label. It reads four signals off a face and answers
 with the six states in our table.
 
