@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "everyday-tools",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "serve", "-l", "8743", "/Users/FordhamWong/Desktop/reusable studio engine/everyday-tools"],
+      "port": 8743
+    },
+    {
+      "name": "sensor-games",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "serve", "-l", "8755", "/Users/FordhamWong/Desktop/reusable studio engine/sensor-games"],
+      "port": 8755
+    }
+  ]
+}

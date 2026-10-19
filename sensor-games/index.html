@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Motion Arcade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/ml5@1/dist/ml5.min.js"></script>
+</head>
+<body>
+  <!-- hidden webcam feed the pose model reads -->
+  <video id="cam" autoplay playsinline muted></video>
+
+  <div id="stage">
+    <canvas id="game"></canvas>
+
+    <!-- little live pose preview, corner -->
+    <div id="poseHud" hidden>
+      <canvas id="poseCanvas" width="160" height="120"></canvas>
+      <div id="poseStatus">camera off</div>
+    </div>
+
+    <!-- MENU -->
+    <section id="menu" class="overlay">
+      <h1 class="logo">MOTION<span>ARCADE</span></h1>
+      <p class="tag">play with your whole body · original mascots · local multiplayer</p>
+
+      <div class="controlbar">
+        <button class="cam-btn" id="camBtn">▶ enable camera</button>
+        <span class="hint">no camera? every game also plays on the keyboard.</span>
+      </div>
+
+      <div class="grid" id="gameGrid"></div>
+    </section>
+
+    <!-- MODE SELECT -->
+    <section id="modeSelect" class="overlay" hidden>
+      <h2 id="modeTitle">Golf</h2>
+      <div class="modes" id="modeButtons"></div>
+      <button class="back" data-back>← back</button>
+    </section>
+
+    <!-- IN-GAME HUD -->
+    <div id="hud" hidden>
+      <button class="back small" data-back>← menu</button>
+      <div id="scorebar"></div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
