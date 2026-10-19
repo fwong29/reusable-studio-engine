@@ -49,6 +49,7 @@ async function enableCamera() {
     bodyPose = ml5.bodyPose('MoveNet', { maxPoses: 2, flipped: true }, () => {
       bodyPose.detectStart(video, (results) => { Pose.poses = results || []; onPoses(); });
       Pose.ready = true; poseStatus.textContent = 'tracking';
+      if (pending) { const q = pending; pending = null; startGame(q.id, q.mode); }
     });
     Pose.on = true;
     camBtn.textContent = '✓ camera on';
@@ -170,9 +171,8 @@ function shade(hex, amt) {
 /* ============================ GAME SHELL ============================ */
 let current = null;      // current game instance
 let rafId = null;
-const keys = {};
-window.addEventListener('keydown', e => { keys[e.key] = true; if (current && current.key) current.key(e.key, true); });
-window.addEventListener('keyup', e => { keys[e.key] = false; if (current && current.key) current.key(e.key, false); });
+let pending = null;      // game waiting for the camera to be ready
+const keys = {};   // camera-only: kept empty so game keyboard branches never fire
 Pose.swingCb = (info) => { if (current && current.swing) current.swing(info); };
 
 const GAMES = [
@@ -216,6 +216,12 @@ function toMenu() {
 }
 const FACTORY = { golf: Golf, bowling: Bowling, baseball: Baseball, tennis: Tennis, pingpong: PingPong, runner: Runner };
 function startGame(id, mode) {
+  if (!Pose.ready) {                 // camera is required — wait for it, then start
+    pending = { id, mode };
+    modeButtons.innerHTML = '<div class="waiting">📷 turn on your camera to play…</div>';
+    if (!Pose.on) enableCamera();
+    return;
+  }
   modeSelect.hidden = true; hud.hidden = false;
   current = FACTORY[id] ? FACTORY[id](mode) : null;
   if (!current) { toMenu(); return; }
@@ -500,7 +506,7 @@ function Runner(mode) {
     swing() {},
     update() {
       if (over) return;
-      if (Pose.ready) { const l = leanOf(0); targetLane = l < -0.33 ? -1 : l > 0.33 ? 1 : 0; if (headY(0) < 0.28) jump = 1; }
+      if (Pose.ready) { const l = leanOf(0); targetLane = l < -0.33 ? -1 : l > 0.33 ? 1 : 0; const hd = headY(0); if (hd > 0 && hd < 0.3) jump = 1; if (hd > 0.6) crouch = 1; }
       lane += (targetLane - lane) * 0.25;
       if (jump > 0) jump = Math.max(0, jump - 0.04); if (crouch > 0) crouch = Math.max(0, crouch - 0.05);
       dist += 1 + speed * 100; speed += 0.000004;
